@@ -51,7 +51,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 16),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 19),
 	}
 	return nd
 }
@@ -238,6 +238,18 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 	return inst.AccountMetaSlice.Get(15)
 }
 
+func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
+	amount := len(pk)
+	if amount == 1 {
+		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
+	} else {
+		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[17] = ag_solanago.Meta(pk[1]).WRITE()
+		inst.AccountMetaSlice[18] = ag_solanago.Meta(pk[2]).SIGNER()
+	}
+	return inst
+}
+
 func (inst MintNft) Build() *Instruction {
 	return &Instruction{BaseVariant: ag_binary.BaseVariant{
 		Impl:   inst,
@@ -390,7 +402,8 @@ func NewMintNftInstruction(
 	rent ag_solanago.PublicKey,
 	clock ag_solanago.PublicKey,
 	recentBlockhashes ag_solanago.PublicKey,
-	instructionSysvarAccount ag_solanago.PublicKey) *MintNft {
+	instructionSysvarAccount ag_solanago.PublicKey,
+	remainingAccounts []ag_solanago.PublicKey) *MintNft {
 	return NewMintNftInstructionBuilder().
 		SetCreatorBump(creatorBump).
 		SetCandyMachineAccount(candyMachine).
@@ -408,5 +421,6 @@ func NewMintNftInstruction(
 		SetRentAccount(rent).
 		SetClockAccount(clock).
 		SetRecentBlockhashesAccount(recentBlockhashes).
-		SetInstructionSysvarAccountAccount(instructionSysvarAccount)
+		SetInstructionSysvarAccountAccount(instructionSysvarAccount).
+		SetRemainingAccounts(remainingAccounts)
 }
