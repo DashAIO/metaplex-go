@@ -12,4 +12,4 @@ require (
 	github.com/stretchr/testify v1.6.1
 )
 
-replace github.com/gagliardetto/metaplex-go => github.com/DashAIO/metaplex-go v0.2.3
+replace github.com/gagliardetto/metaplex-go => github.com/DashAIO/metaplex-go v0.2.4
