@@ -1,4 +1,4 @@
-module github.com/gagliardetto/metaplex-go
+module github.com/DashAIO/metaplex-go
 
 go 1.16
 
