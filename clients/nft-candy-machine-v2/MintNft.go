@@ -241,6 +241,9 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
 	length := len(inst.AccountMetaSlice)
+	if amount == 0 {
+		return inst
+	}
 	if amount == 1 {
 		inst.AccountMetaSlice[length] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
@@ -254,6 +257,9 @@ func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 func (inst *MintNft) SetCivicAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
 	length := len(inst.AccountMetaSlice)
+	if amount == 0 {
+		return inst
+	}
 	if amount == 1 {
 		inst.AccountMetaSlice[length] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
