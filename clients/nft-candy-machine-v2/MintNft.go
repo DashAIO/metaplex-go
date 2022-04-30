@@ -238,33 +238,13 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 	return inst.AccountMetaSlice.Get(15)
 }
 
-func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
+func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.AccountMeta) *MintNft {
 	amount := len(pk)
 	if amount == 0 {
 		return inst
 	}
-	if amount == 1 {
-		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
-	} else {
-		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[17] = ag_solanago.Meta(pk[1]).WRITE()
-		inst.AccountMetaSlice[18] = ag_solanago.Meta(pk[2]).SIGNER()
-	}
-	return inst
-}
-
-func (inst *MintNft) SetCivicAccounts(accountsLength int, pk []ag_solanago.PublicKey) *MintNft {
-	amount := len(pk)
-	if amount == 0 {
-		return inst
-	}
-	index = 16+accountsLength
-	if amount == 1 {
-		inst.AccountMetaSlice[index] = ag_solanago.Meta(pk[0]).WRITE()
-	} else {
-		inst.AccountMetaSlice[index] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[index+1] = ag_solanago.Meta(pk[1])
-		inst.AccountMetaSlice[index+2] = ag_solanago.Meta(pk[2])
+	for i := 0; i < amount; i++ {
+		inst.AccountMetaSlice[16+i] = pk[i]
 	}
 	return inst
 }
@@ -422,8 +402,7 @@ func NewMintNftInstruction(
 	clock ag_solanago.PublicKey,
 	recentBlockhashes ag_solanago.PublicKey,
 	instructionSysvarAccount ag_solanago.PublicKey,
-	remainingAccounts []ag_solanago.PublicKey,
-	civicAccounts []ag_solanago.PublicKey) *MintNft {
+	remainingAccounts []ag_solanago.AccountMeta) *MintNft {
 	return NewMintNftInstructionBuilder().
 		SetCreatorBump(creatorBump).
 		SetCandyMachineAccount(candyMachine).
@@ -442,6 +421,5 @@ func NewMintNftInstruction(
 		SetClockAccount(clock).
 		SetRecentBlockhashesAccount(recentBlockhashes).
 		SetInstructionSysvarAccountAccount(instructionSysvarAccount).
-		SetCivicAccounts(civicAccounts).
 		SetRemainingAccounts(remainingAccounts)
 }
