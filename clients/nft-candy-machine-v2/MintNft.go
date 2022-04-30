@@ -51,7 +51,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 16, 22),
 	}
 	return nd
 }
@@ -243,21 +243,13 @@ func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	if amount == 0 {
 		return inst
 	}
-	var startIndex int
-	civic := inst.AccountMetaSlice.Get(16)
-	expire := inst.AccountMetaSlice.Get(17)
-	if civic != nil {
-		startIndex = 17
-		if expire != nil {
-			startIndex = 19
-		}
-	}
+	sliceLength := len(inst.AccountMetaSlice)
 	if amount == 1 {
-		inst.AccountMetaSlice[startIndex] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
-		inst.AccountMetaSlice[startIndex] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[startIndex+1] = ag_solanago.Meta(pk[1]).WRITE()
-		inst.AccountMetaSlice[startIndex+2] = ag_solanago.Meta(pk[2]).SIGNER()
+		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[sliceLength+1] = ag_solanago.Meta(pk[1]).WRITE()
+		inst.AccountMetaSlice[sliceLength+2] = ag_solanago.Meta(pk[2]).SIGNER()
 	}
 	return inst
 }
@@ -267,12 +259,13 @@ func (inst *MintNft) SetCivicAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	if amount == 0 {
 		return inst
 	}
+	sliceLength := len(inst.AccountMetaSlice)
 	if amount == 1 {
-		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
-		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[16+1] = ag_solanago.Meta(pk[1])
-		inst.AccountMetaSlice[16+2] = ag_solanago.Meta(pk[2])
+		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[sliceLength+1] = ag_solanago.Meta(pk[1])
+		inst.AccountMetaSlice[sliceLength+2] = ag_solanago.Meta(pk[2])
 	}
 	return inst
 }
