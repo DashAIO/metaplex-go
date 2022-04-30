@@ -52,7 +52,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 0, 22),
 	}
 	return nd
 }
@@ -242,7 +242,6 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
 	length := len(inst.AccountMetaSlice)
-	fmt.Print(inst.AccountMetaSlice[length-1])
 	if amount == 0 {
 		return inst
 	}
