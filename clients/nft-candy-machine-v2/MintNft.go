@@ -242,7 +242,7 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
 	length := len(inst.AccountMetaSlice)
-	fmt.Print(length)
+	fmt.Print(inst.AccountMetaSlice[length-1])
 	if amount == 0 {
 		return inst
 	}
