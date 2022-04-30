@@ -51,7 +51,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 0, 22),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
 	}
 	return nd
 }
@@ -240,32 +240,39 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 
 func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
-	length := len(inst.AccountMetaSlice)
 	if amount == 0 {
 		return inst
 	}
+	var startIndex int
+	civic := inst.AccountMetaSlice.Get(16)
+	expire := inst.AccountMetaSlice.Get(17)
+	if civic != nil {
+		startIndex = 17
+		if expire != nil {
+			startIndex = 19
+		}
+	}
 	if amount == 1 {
-		inst.AccountMetaSlice[length] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[startIndex] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
-		inst.AccountMetaSlice[length] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[length+1] = ag_solanago.Meta(pk[1]).WRITE()
-		inst.AccountMetaSlice[length+2] = ag_solanago.Meta(pk[2]).SIGNER()
+		inst.AccountMetaSlice[startIndex] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[startIndex+1] = ag_solanago.Meta(pk[1]).WRITE()
+		inst.AccountMetaSlice[startIndex+2] = ag_solanago.Meta(pk[2]).SIGNER()
 	}
 	return inst
 }
 
 func (inst *MintNft) SetCivicAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
-	length := len(inst.AccountMetaSlice)
 	if amount == 0 {
 		return inst
 	}
 	if amount == 1 {
-		inst.AccountMetaSlice[length] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
-		inst.AccountMetaSlice[length] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[length+1] = ag_solanago.Meta(pk[1])
-		inst.AccountMetaSlice[length+2] = ag_solanago.Meta(pk[2])
+		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[16+1] = ag_solanago.Meta(pk[1])
+		inst.AccountMetaSlice[16+2] = ag_solanago.Meta(pk[2])
 	}
 	return inst
 }
