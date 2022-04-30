@@ -51,7 +51,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 16, 22),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
 	}
 	return nd
 }
@@ -243,29 +243,28 @@ func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	if amount == 0 {
 		return inst
 	}
-	sliceLength := len(inst.AccountMetaSlice)
 	if amount == 1 {
-		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
-		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[sliceLength+1] = ag_solanago.Meta(pk[1]).WRITE()
-		inst.AccountMetaSlice[sliceLength+2] = ag_solanago.Meta(pk[2]).SIGNER()
+		inst.AccountMetaSlice[16] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[17] = ag_solanago.Meta(pk[1]).WRITE()
+		inst.AccountMetaSlice[18] = ag_solanago.Meta(pk[2]).SIGNER()
 	}
 	return inst
 }
 
-func (inst *MintNft) SetCivicAccounts(pk []ag_solanago.PublicKey) *MintNft {
+func (inst *MintNft) SetCivicAccounts(accountsLength int, pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
 	if amount == 0 {
 		return inst
 	}
-	sliceLength := len(inst.AccountMetaSlice)
+	index = 16+accountsLength
 	if amount == 1 {
-		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[index] = ag_solanago.Meta(pk[0]).WRITE()
 	} else {
-		inst.AccountMetaSlice[sliceLength] = ag_solanago.Meta(pk[0]).WRITE()
-		inst.AccountMetaSlice[sliceLength+1] = ag_solanago.Meta(pk[1])
-		inst.AccountMetaSlice[sliceLength+2] = ag_solanago.Meta(pk[2])
+		inst.AccountMetaSlice[index] = ag_solanago.Meta(pk[0]).WRITE()
+		inst.AccountMetaSlice[index+1] = ag_solanago.Meta(pk[1])
+		inst.AccountMetaSlice[index+2] = ag_solanago.Meta(pk[2])
 	}
 	return inst
 }
