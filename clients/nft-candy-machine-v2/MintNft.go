@@ -244,7 +244,7 @@ func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.AccountMeta) *MintNft
 		return inst
 	}
 	for i := 0; i < amount; i++ {
-		inst.AccountMetaSlice[16+i] = *pk[i]
+		inst.AccountMetaSlice[16+i] = &pk[i]
 	}
 	return inst
 }
