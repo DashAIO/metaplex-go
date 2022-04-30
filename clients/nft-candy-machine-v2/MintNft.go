@@ -4,6 +4,7 @@ package nft_candy_machine_v2
 
 import (
 	"errors"
+	"fmt"
 	ag_binary "github.com/gagliardetto/binary"
 	ag_solanago "github.com/gagliardetto/solana-go"
 	ag_format "github.com/gagliardetto/solana-go/text/format"
@@ -51,7 +52,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 23),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
 	}
 	return nd
 }
@@ -241,6 +242,7 @@ func (inst *MintNft) GetInstructionSysvarAccountAccount() *ag_solanago.AccountMe
 func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.PublicKey) *MintNft {
 	amount := len(pk)
 	length := len(inst.AccountMetaSlice)
+	fmt.Print(length)
 	if amount == 0 {
 		return inst
 	}
