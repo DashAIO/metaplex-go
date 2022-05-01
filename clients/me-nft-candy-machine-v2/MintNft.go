@@ -248,13 +248,13 @@ func (inst *MintNft) GetTokenProgramAccount() *ag_solanago.AccountMeta {
 
 // SetSystemProgramAccount sets the "systemProgram" account.
 func (inst *MintNft) SetSystemProgramAccount(systemProgram ag_solanago.PublicKey) *MintNft {
-	fmt.Print(systemProgram)
 	inst.AccountMetaSlice[15] = ag_solanago.Meta(systemProgram)
 	return inst
 }
 
 // GetSystemProgramAccount gets the "systemProgram" account.
 func (inst *MintNft) GetSystemProgramAccount() *ag_solanago.AccountMeta {
+	fmt.Print(systemProgram)
 	return inst.AccountMetaSlice.Get(15)
 }
 
