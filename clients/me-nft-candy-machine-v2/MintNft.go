@@ -57,7 +57,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 18),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 21),
 	}
 	return nd
 }
@@ -270,6 +270,17 @@ func (inst *MintNft) GetAssociatedTokenProgramAccount() *ag_solanago.AccountMeta
 // SetRentAccount sets the "rent" account.
 func (inst *MintNft) SetRentAccount(rent ag_solanago.PublicKey) *MintNft {
 	inst.AccountMetaSlice[17] = ag_solanago.Meta(rent)
+	return inst
+}
+
+func (inst *MintNft) SetRemainingAccounts(pk []ag_solanago.AccountMeta) *MintNft {
+	amount := len(pk)
+	if amount == 0 {
+		return inst
+	}
+	for i := 0; i < amount; i++ {
+		inst.AccountMetaSlice[18+i] = &pk[i]
+	}
 	return inst
 }
 
@@ -488,7 +499,8 @@ func NewMintNftInstruction(
 	tokenProgram ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
 	associatedTokenProgram ag_solanago.PublicKey,
-	rent ag_solanago.PublicKey) *MintNft {
+	rent ag_solanago.PublicKey,
+	remainingAccounts []ag_solanago.AccountMeta) *MintNft {
 	return NewMintNftInstructionBuilder().
 		SetWalletLimitBump(walletLimitBump).
 		SetInOrder(inOrder).
@@ -510,5 +522,6 @@ func NewMintNftInstruction(
 		SetTokenProgramAccount(tokenProgram).
 		SetSystemProgramAccount(systemProgram).
 		SetAssociatedTokenProgramAccount(associatedTokenProgram).
-		SetRentAccount(rent)
+		SetRentAccount(rent).
+		SetRemainingAccounts(remainingAccounts)
 }
