@@ -4,6 +4,7 @@ package nft_candy_machine
 
 import (
 	"errors"
+	"fmt"
 	ag_binary "github.com/gagliardetto/binary"
 	ag_solanago "github.com/gagliardetto/solana-go"
 	ag_format "github.com/gagliardetto/solana-go/text/format"
@@ -247,6 +248,7 @@ func (inst *MintNft) GetTokenProgramAccount() *ag_solanago.AccountMeta {
 
 // SetSystemProgramAccount sets the "systemProgram" account.
 func (inst *MintNft) SetSystemProgramAccount(systemProgram ag_solanago.PublicKey) *MintNft {
+	fmt.Print(systemProgram)
 	inst.AccountMetaSlice[15] = ag_solanago.Meta(systemProgram)
 	return inst
 }
