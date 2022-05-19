@@ -21,46 +21,48 @@ type SettleRaffleTicket struct {
 	//
 	// [3] = [] launchStagesInfo
 	//
-	// [4] = [WRITE] wallet
+	// [4] = [WRITE] raffleTicket
 	//
-	// [5] = [WRITE] raffleTicket
+	// [5] = [WRITE] raffleEscrow
 	//
-	// [6] = [WRITE] raffleEscrow
+	// [6] = [WRITE] payTo
 	//
-	// [7] = [WRITE] tokenAta
+	// [7] = [WRITE] refundTo
 	//
-	// [8] = [WRITE] rafflePayer
+	// [8] = [WRITE] tokenAta
 	//
-	// [9] = [WRITE] orderInfo
+	// [9] = [WRITE] rafflePayer
 	//
-	// [10] = [SIGNER] notary
+	// [10] = [WRITE] orderInfo
 	//
-	// [11] = [WRITE] metadata
+	// [11] = [SIGNER] notary
 	//
-	// [12] = [WRITE, SIGNER] mint
+	// [12] = [WRITE] metadata
 	//
-	// [13] = [SIGNER] updateAuthority
+	// [13] = [WRITE, SIGNER] mint
 	//
-	// [14] = [WRITE] masterEdition
+	// [14] = [SIGNER] updateAuthority
 	//
-	// [15] = [] slotHashes
+	// [15] = [WRITE] masterEdition
 	//
-	// [16] = [] tokenMetadataProgram
+	// [16] = [] slotHashes
 	//
-	// [17] = [] associatedTokenProgram
+	// [17] = [] tokenMetadataProgram
 	//
-	// [18] = [] tokenProgram
+	// [18] = [] associatedTokenProgram
 	//
-	// [19] = [] systemProgram
+	// [19] = [] tokenProgram
 	//
-	// [20] = [] rent
+	// [20] = [] systemProgram
+	//
+	// [21] = [] rent
 	ag_solanago.AccountMetaSlice `bin:"-"`
 }
 
 // NewSettleRaffleTicketInstructionBuilder creates a new `SettleRaffleTicket` instruction builder.
 func NewSettleRaffleTicketInstructionBuilder() *SettleRaffleTicket {
 	nd := &SettleRaffleTicket{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 21),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
 	}
 	return nd
 }
@@ -109,191 +111,202 @@ func (inst *SettleRaffleTicket) GetLaunchStagesInfoAccount() *ag_solanago.Accoun
 	return inst.AccountMetaSlice.Get(3)
 }
 
-// SetWalletAccount sets the "wallet" account.
-func (inst *SettleRaffleTicket) SetWalletAccount(wallet ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[4] = ag_solanago.Meta(wallet).WRITE()
-	return inst
-}
-
-// GetWalletAccount gets the "wallet" account.
-func (inst *SettleRaffleTicket) GetWalletAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(4)
-}
-
 // SetRaffleTicketAccount sets the "raffleTicket" account.
 func (inst *SettleRaffleTicket) SetRaffleTicketAccount(raffleTicket ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[5] = ag_solanago.Meta(raffleTicket).WRITE()
+	inst.AccountMetaSlice[4] = ag_solanago.Meta(raffleTicket).WRITE()
 	return inst
 }
 
 // GetRaffleTicketAccount gets the "raffleTicket" account.
 func (inst *SettleRaffleTicket) GetRaffleTicketAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(5)
+	return inst.AccountMetaSlice.Get(4)
 }
 
 // SetRaffleEscrowAccount sets the "raffleEscrow" account.
 func (inst *SettleRaffleTicket) SetRaffleEscrowAccount(raffleEscrow ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[6] = ag_solanago.Meta(raffleEscrow).WRITE()
+	inst.AccountMetaSlice[5] = ag_solanago.Meta(raffleEscrow).WRITE()
 	return inst
 }
 
 // GetRaffleEscrowAccount gets the "raffleEscrow" account.
 func (inst *SettleRaffleTicket) GetRaffleEscrowAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(5)
+}
+
+// SetPayToAccount sets the "payTo" account.
+func (inst *SettleRaffleTicket) SetPayToAccount(payTo ag_solanago.PublicKey) *SettleRaffleTicket {
+	inst.AccountMetaSlice[6] = ag_solanago.Meta(payTo).WRITE()
+	return inst
+}
+
+// GetPayToAccount gets the "payTo" account.
+func (inst *SettleRaffleTicket) GetPayToAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(6)
+}
+
+// SetRefundToAccount sets the "refundTo" account.
+func (inst *SettleRaffleTicket) SetRefundToAccount(refundTo ag_solanago.PublicKey) *SettleRaffleTicket {
+	inst.AccountMetaSlice[7] = ag_solanago.Meta(refundTo).WRITE()
+	return inst
+}
+
+// GetRefundToAccount gets the "refundTo" account.
+func (inst *SettleRaffleTicket) GetRefundToAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(7)
 }
 
 // SetTokenAtaAccount sets the "tokenAta" account.
 func (inst *SettleRaffleTicket) SetTokenAtaAccount(tokenAta ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[7] = ag_solanago.Meta(tokenAta).WRITE()
+	inst.AccountMetaSlice[8] = ag_solanago.Meta(tokenAta).WRITE()
 	return inst
 }
 
 // GetTokenAtaAccount gets the "tokenAta" account.
 func (inst *SettleRaffleTicket) GetTokenAtaAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(7)
+	return inst.AccountMetaSlice.Get(8)
 }
 
 // SetRafflePayerAccount sets the "rafflePayer" account.
 func (inst *SettleRaffleTicket) SetRafflePayerAccount(rafflePayer ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[8] = ag_solanago.Meta(rafflePayer).WRITE()
+	inst.AccountMetaSlice[9] = ag_solanago.Meta(rafflePayer).WRITE()
 	return inst
 }
 
 // GetRafflePayerAccount gets the "rafflePayer" account.
 func (inst *SettleRaffleTicket) GetRafflePayerAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(8)
+	return inst.AccountMetaSlice.Get(9)
 }
 
 // SetOrderInfoAccount sets the "orderInfo" account.
 func (inst *SettleRaffleTicket) SetOrderInfoAccount(orderInfo ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[9] = ag_solanago.Meta(orderInfo).WRITE()
+	inst.AccountMetaSlice[10] = ag_solanago.Meta(orderInfo).WRITE()
 	return inst
 }
 
 // GetOrderInfoAccount gets the "orderInfo" account.
 func (inst *SettleRaffleTicket) GetOrderInfoAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(9)
+	return inst.AccountMetaSlice.Get(10)
 }
 
 // SetNotaryAccount sets the "notary" account.
 func (inst *SettleRaffleTicket) SetNotaryAccount(notary ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[10] = ag_solanago.Meta(notary).SIGNER()
+	inst.AccountMetaSlice[11] = ag_solanago.Meta(notary).SIGNER()
 	return inst
 }
 
 // GetNotaryAccount gets the "notary" account.
 func (inst *SettleRaffleTicket) GetNotaryAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(10)
+	return inst.AccountMetaSlice.Get(11)
 }
 
 // SetMetadataAccount sets the "metadata" account.
 func (inst *SettleRaffleTicket) SetMetadataAccount(metadata ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[11] = ag_solanago.Meta(metadata).WRITE()
+	inst.AccountMetaSlice[12] = ag_solanago.Meta(metadata).WRITE()
 	return inst
 }
 
 // GetMetadataAccount gets the "metadata" account.
 func (inst *SettleRaffleTicket) GetMetadataAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(11)
+	return inst.AccountMetaSlice.Get(12)
 }
 
 // SetMintAccount sets the "mint" account.
 func (inst *SettleRaffleTicket) SetMintAccount(mint ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[12] = ag_solanago.Meta(mint).WRITE().SIGNER()
+	inst.AccountMetaSlice[13] = ag_solanago.Meta(mint).WRITE().SIGNER()
 	return inst
 }
 
 // GetMintAccount gets the "mint" account.
 func (inst *SettleRaffleTicket) GetMintAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(12)
+	return inst.AccountMetaSlice.Get(13)
 }
 
 // SetUpdateAuthorityAccount sets the "updateAuthority" account.
 func (inst *SettleRaffleTicket) SetUpdateAuthorityAccount(updateAuthority ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[13] = ag_solanago.Meta(updateAuthority).SIGNER()
+	inst.AccountMetaSlice[14] = ag_solanago.Meta(updateAuthority).SIGNER()
 	return inst
 }
 
 // GetUpdateAuthorityAccount gets the "updateAuthority" account.
 func (inst *SettleRaffleTicket) GetUpdateAuthorityAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(13)
+	return inst.AccountMetaSlice.Get(14)
 }
 
 // SetMasterEditionAccount sets the "masterEdition" account.
 func (inst *SettleRaffleTicket) SetMasterEditionAccount(masterEdition ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[14] = ag_solanago.Meta(masterEdition).WRITE()
+	inst.AccountMetaSlice[15] = ag_solanago.Meta(masterEdition).WRITE()
 	return inst
 }
 
 // GetMasterEditionAccount gets the "masterEdition" account.
 func (inst *SettleRaffleTicket) GetMasterEditionAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(14)
+	return inst.AccountMetaSlice.Get(15)
 }
 
 // SetSlotHashesAccount sets the "slotHashes" account.
 func (inst *SettleRaffleTicket) SetSlotHashesAccount(slotHashes ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[15] = ag_solanago.Meta(slotHashes)
+	inst.AccountMetaSlice[16] = ag_solanago.Meta(slotHashes)
 	return inst
 }
 
 // GetSlotHashesAccount gets the "slotHashes" account.
 func (inst *SettleRaffleTicket) GetSlotHashesAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(15)
+	return inst.AccountMetaSlice.Get(16)
 }
 
 // SetTokenMetadataProgramAccount sets the "tokenMetadataProgram" account.
 func (inst *SettleRaffleTicket) SetTokenMetadataProgramAccount(tokenMetadataProgram ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[16] = ag_solanago.Meta(tokenMetadataProgram)
+	inst.AccountMetaSlice[17] = ag_solanago.Meta(tokenMetadataProgram)
 	return inst
 }
 
 // GetTokenMetadataProgramAccount gets the "tokenMetadataProgram" account.
 func (inst *SettleRaffleTicket) GetTokenMetadataProgramAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(16)
+	return inst.AccountMetaSlice.Get(17)
 }
 
 // SetAssociatedTokenProgramAccount sets the "associatedTokenProgram" account.
 func (inst *SettleRaffleTicket) SetAssociatedTokenProgramAccount(associatedTokenProgram ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[17] = ag_solanago.Meta(associatedTokenProgram)
+	inst.AccountMetaSlice[18] = ag_solanago.Meta(associatedTokenProgram)
 	return inst
 }
 
 // GetAssociatedTokenProgramAccount gets the "associatedTokenProgram" account.
 func (inst *SettleRaffleTicket) GetAssociatedTokenProgramAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(17)
+	return inst.AccountMetaSlice.Get(18)
 }
 
 // SetTokenProgramAccount sets the "tokenProgram" account.
 func (inst *SettleRaffleTicket) SetTokenProgramAccount(tokenProgram ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[18] = ag_solanago.Meta(tokenProgram)
+	inst.AccountMetaSlice[19] = ag_solanago.Meta(tokenProgram)
 	return inst
 }
 
 // GetTokenProgramAccount gets the "tokenProgram" account.
 func (inst *SettleRaffleTicket) GetTokenProgramAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(18)
+	return inst.AccountMetaSlice.Get(19)
 }
 
 // SetSystemProgramAccount sets the "systemProgram" account.
 func (inst *SettleRaffleTicket) SetSystemProgramAccount(systemProgram ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[19] = ag_solanago.Meta(systemProgram)
+	inst.AccountMetaSlice[20] = ag_solanago.Meta(systemProgram)
 	return inst
 }
 
 // GetSystemProgramAccount gets the "systemProgram" account.
 func (inst *SettleRaffleTicket) GetSystemProgramAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(19)
+	return inst.AccountMetaSlice.Get(20)
 }
 
 // SetRentAccount sets the "rent" account.
 func (inst *SettleRaffleTicket) SetRentAccount(rent ag_solanago.PublicKey) *SettleRaffleTicket {
-	inst.AccountMetaSlice[20] = ag_solanago.Meta(rent)
+	inst.AccountMetaSlice[21] = ag_solanago.Meta(rent)
 	return inst
 }
 
 // GetRentAccount gets the "rent" account.
 func (inst *SettleRaffleTicket) GetRentAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(20)
+	return inst.AccountMetaSlice.Get(21)
 }
 
 func (inst SettleRaffleTicket) Build() *Instruction {
@@ -329,54 +342,57 @@ func (inst *SettleRaffleTicket) Validate() error {
 			return errors.New("accounts.LaunchStagesInfo is not set")
 		}
 		if inst.AccountMetaSlice[4] == nil {
-			return errors.New("accounts.Wallet is not set")
-		}
-		if inst.AccountMetaSlice[5] == nil {
 			return errors.New("accounts.RaffleTicket is not set")
 		}
-		if inst.AccountMetaSlice[6] == nil {
+		if inst.AccountMetaSlice[5] == nil {
 			return errors.New("accounts.RaffleEscrow is not set")
 		}
+		if inst.AccountMetaSlice[6] == nil {
+			return errors.New("accounts.PayTo is not set")
+		}
 		if inst.AccountMetaSlice[7] == nil {
-			return errors.New("accounts.TokenAta is not set")
+			return errors.New("accounts.RefundTo is not set")
 		}
 		if inst.AccountMetaSlice[8] == nil {
-			return errors.New("accounts.RafflePayer is not set")
+			return errors.New("accounts.TokenAta is not set")
 		}
 		if inst.AccountMetaSlice[9] == nil {
-			return errors.New("accounts.OrderInfo is not set")
+			return errors.New("accounts.RafflePayer is not set")
 		}
 		if inst.AccountMetaSlice[10] == nil {
-			return errors.New("accounts.Notary is not set")
+			return errors.New("accounts.OrderInfo is not set")
 		}
 		if inst.AccountMetaSlice[11] == nil {
-			return errors.New("accounts.Metadata is not set")
+			return errors.New("accounts.Notary is not set")
 		}
 		if inst.AccountMetaSlice[12] == nil {
-			return errors.New("accounts.Mint is not set")
+			return errors.New("accounts.Metadata is not set")
 		}
 		if inst.AccountMetaSlice[13] == nil {
-			return errors.New("accounts.UpdateAuthority is not set")
+			return errors.New("accounts.Mint is not set")
 		}
 		if inst.AccountMetaSlice[14] == nil {
-			return errors.New("accounts.MasterEdition is not set")
+			return errors.New("accounts.UpdateAuthority is not set")
 		}
 		if inst.AccountMetaSlice[15] == nil {
-			return errors.New("accounts.SlotHashes is not set")
+			return errors.New("accounts.MasterEdition is not set")
 		}
 		if inst.AccountMetaSlice[16] == nil {
-			return errors.New("accounts.TokenMetadataProgram is not set")
+			return errors.New("accounts.SlotHashes is not set")
 		}
 		if inst.AccountMetaSlice[17] == nil {
-			return errors.New("accounts.AssociatedTokenProgram is not set")
+			return errors.New("accounts.TokenMetadataProgram is not set")
 		}
 		if inst.AccountMetaSlice[18] == nil {
-			return errors.New("accounts.TokenProgram is not set")
+			return errors.New("accounts.AssociatedTokenProgram is not set")
 		}
 		if inst.AccountMetaSlice[19] == nil {
-			return errors.New("accounts.SystemProgram is not set")
+			return errors.New("accounts.TokenProgram is not set")
 		}
 		if inst.AccountMetaSlice[20] == nil {
+			return errors.New("accounts.SystemProgram is not set")
+		}
+		if inst.AccountMetaSlice[21] == nil {
 			return errors.New("accounts.Rent is not set")
 		}
 	}
@@ -395,28 +411,29 @@ func (inst *SettleRaffleTicket) EncodeToTree(parent ag_treeout.Branches) {
 					instructionBranch.Child("Params[len=0]").ParentFunc(func(paramsBranch ag_treeout.Branches) {})
 
 					// Accounts of the instruction:
-					instructionBranch.Child("Accounts[len=21]").ParentFunc(func(accountsBranch ag_treeout.Branches) {
+					instructionBranch.Child("Accounts[len=22]").ParentFunc(func(accountsBranch ag_treeout.Branches) {
 						accountsBranch.Child(ag_format.Meta("                config", inst.AccountMetaSlice.Get(0)))
 						accountsBranch.Child(ag_format.Meta("          candyMachine", inst.AccountMetaSlice.Get(1)))
 						accountsBranch.Child(ag_format.Meta("                 payer", inst.AccountMetaSlice.Get(2)))
 						accountsBranch.Child(ag_format.Meta("      launchStagesInfo", inst.AccountMetaSlice.Get(3)))
-						accountsBranch.Child(ag_format.Meta("                wallet", inst.AccountMetaSlice.Get(4)))
-						accountsBranch.Child(ag_format.Meta("          raffleTicket", inst.AccountMetaSlice.Get(5)))
-						accountsBranch.Child(ag_format.Meta("          raffleEscrow", inst.AccountMetaSlice.Get(6)))
-						accountsBranch.Child(ag_format.Meta("              tokenAta", inst.AccountMetaSlice.Get(7)))
-						accountsBranch.Child(ag_format.Meta("           rafflePayer", inst.AccountMetaSlice.Get(8)))
-						accountsBranch.Child(ag_format.Meta("             orderInfo", inst.AccountMetaSlice.Get(9)))
-						accountsBranch.Child(ag_format.Meta("                notary", inst.AccountMetaSlice.Get(10)))
-						accountsBranch.Child(ag_format.Meta("              metadata", inst.AccountMetaSlice.Get(11)))
-						accountsBranch.Child(ag_format.Meta("                  mint", inst.AccountMetaSlice.Get(12)))
-						accountsBranch.Child(ag_format.Meta("       updateAuthority", inst.AccountMetaSlice.Get(13)))
-						accountsBranch.Child(ag_format.Meta("         masterEdition", inst.AccountMetaSlice.Get(14)))
-						accountsBranch.Child(ag_format.Meta("            slotHashes", inst.AccountMetaSlice.Get(15)))
-						accountsBranch.Child(ag_format.Meta("  tokenMetadataProgram", inst.AccountMetaSlice.Get(16)))
-						accountsBranch.Child(ag_format.Meta("associatedTokenProgram", inst.AccountMetaSlice.Get(17)))
-						accountsBranch.Child(ag_format.Meta("          tokenProgram", inst.AccountMetaSlice.Get(18)))
-						accountsBranch.Child(ag_format.Meta("         systemProgram", inst.AccountMetaSlice.Get(19)))
-						accountsBranch.Child(ag_format.Meta("                  rent", inst.AccountMetaSlice.Get(20)))
+						accountsBranch.Child(ag_format.Meta("          raffleTicket", inst.AccountMetaSlice.Get(4)))
+						accountsBranch.Child(ag_format.Meta("          raffleEscrow", inst.AccountMetaSlice.Get(5)))
+						accountsBranch.Child(ag_format.Meta("                 payTo", inst.AccountMetaSlice.Get(6)))
+						accountsBranch.Child(ag_format.Meta("              refundTo", inst.AccountMetaSlice.Get(7)))
+						accountsBranch.Child(ag_format.Meta("              tokenAta", inst.AccountMetaSlice.Get(8)))
+						accountsBranch.Child(ag_format.Meta("           rafflePayer", inst.AccountMetaSlice.Get(9)))
+						accountsBranch.Child(ag_format.Meta("             orderInfo", inst.AccountMetaSlice.Get(10)))
+						accountsBranch.Child(ag_format.Meta("                notary", inst.AccountMetaSlice.Get(11)))
+						accountsBranch.Child(ag_format.Meta("              metadata", inst.AccountMetaSlice.Get(12)))
+						accountsBranch.Child(ag_format.Meta("                  mint", inst.AccountMetaSlice.Get(13)))
+						accountsBranch.Child(ag_format.Meta("       updateAuthority", inst.AccountMetaSlice.Get(14)))
+						accountsBranch.Child(ag_format.Meta("         masterEdition", inst.AccountMetaSlice.Get(15)))
+						accountsBranch.Child(ag_format.Meta("            slotHashes", inst.AccountMetaSlice.Get(16)))
+						accountsBranch.Child(ag_format.Meta("  tokenMetadataProgram", inst.AccountMetaSlice.Get(17)))
+						accountsBranch.Child(ag_format.Meta("associatedTokenProgram", inst.AccountMetaSlice.Get(18)))
+						accountsBranch.Child(ag_format.Meta("          tokenProgram", inst.AccountMetaSlice.Get(19)))
+						accountsBranch.Child(ag_format.Meta("         systemProgram", inst.AccountMetaSlice.Get(20)))
+						accountsBranch.Child(ag_format.Meta("                  rent", inst.AccountMetaSlice.Get(21)))
 					})
 				})
 		})
@@ -436,9 +453,10 @@ func NewSettleRaffleTicketInstruction(
 	candyMachine ag_solanago.PublicKey,
 	payer ag_solanago.PublicKey,
 	launchStagesInfo ag_solanago.PublicKey,
-	wallet ag_solanago.PublicKey,
 	raffleTicket ag_solanago.PublicKey,
 	raffleEscrow ag_solanago.PublicKey,
+	payTo ag_solanago.PublicKey,
+	refundTo ag_solanago.PublicKey,
 	tokenAta ag_solanago.PublicKey,
 	rafflePayer ag_solanago.PublicKey,
 	orderInfo ag_solanago.PublicKey,
@@ -458,9 +476,10 @@ func NewSettleRaffleTicketInstruction(
 		SetCandyMachineAccount(candyMachine).
 		SetPayerAccount(payer).
 		SetLaunchStagesInfoAccount(launchStagesInfo).
-		SetWalletAccount(wallet).
 		SetRaffleTicketAccount(raffleTicket).
 		SetRaffleEscrowAccount(raffleEscrow).
+		SetPayToAccount(payTo).
+		SetRefundToAccount(refundTo).
 		SetTokenAtaAccount(tokenAta).
 		SetRafflePayerAccount(rafflePayer).
 		SetOrderInfoAccount(orderInfo).

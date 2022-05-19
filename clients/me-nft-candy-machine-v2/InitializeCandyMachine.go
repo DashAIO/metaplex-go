@@ -20,7 +20,7 @@ type InitializeCandyMachine struct {
 	//
 	// [2] = [WRITE] orderInfo
 	//
-	// [3] = [] wallet
+	// [3] = [] walletAuthority
 	//
 	// [4] = [] config
 	//
@@ -33,13 +33,17 @@ type InitializeCandyMachine struct {
 	// [8] = [] systemProgram
 	//
 	// [9] = [] rent
+	//
+	// [10] = [] associatedTokenProgram
+	//
+	// [11] = [] tokenProgram
 	ag_solanago.AccountMetaSlice `bin:"-"`
 }
 
 // NewInitializeCandyMachineInstructionBuilder creates a new `InitializeCandyMachine` instruction builder.
 func NewInitializeCandyMachineInstructionBuilder() *InitializeCandyMachine {
 	nd := &InitializeCandyMachine{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 10),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 12),
 	}
 	return nd
 }
@@ -83,14 +87,14 @@ func (inst *InitializeCandyMachine) GetOrderInfoAccount() *ag_solanago.AccountMe
 	return inst.AccountMetaSlice.Get(2)
 }
 
-// SetWalletAccount sets the "wallet" account.
-func (inst *InitializeCandyMachine) SetWalletAccount(wallet ag_solanago.PublicKey) *InitializeCandyMachine {
-	inst.AccountMetaSlice[3] = ag_solanago.Meta(wallet)
+// SetWalletAuthorityAccount sets the "walletAuthority" account.
+func (inst *InitializeCandyMachine) SetWalletAuthorityAccount(walletAuthority ag_solanago.PublicKey) *InitializeCandyMachine {
+	inst.AccountMetaSlice[3] = ag_solanago.Meta(walletAuthority)
 	return inst
 }
 
-// GetWalletAccount gets the "wallet" account.
-func (inst *InitializeCandyMachine) GetWalletAccount() *ag_solanago.AccountMeta {
+// GetWalletAuthorityAccount gets the "walletAuthority" account.
+func (inst *InitializeCandyMachine) GetWalletAuthorityAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(3)
 }
 
@@ -160,6 +164,28 @@ func (inst *InitializeCandyMachine) GetRentAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(9)
 }
 
+// SetAssociatedTokenProgramAccount sets the "associatedTokenProgram" account.
+func (inst *InitializeCandyMachine) SetAssociatedTokenProgramAccount(associatedTokenProgram ag_solanago.PublicKey) *InitializeCandyMachine {
+	inst.AccountMetaSlice[10] = ag_solanago.Meta(associatedTokenProgram)
+	return inst
+}
+
+// GetAssociatedTokenProgramAccount gets the "associatedTokenProgram" account.
+func (inst *InitializeCandyMachine) GetAssociatedTokenProgramAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(10)
+}
+
+// SetTokenProgramAccount sets the "tokenProgram" account.
+func (inst *InitializeCandyMachine) SetTokenProgramAccount(tokenProgram ag_solanago.PublicKey) *InitializeCandyMachine {
+	inst.AccountMetaSlice[11] = ag_solanago.Meta(tokenProgram)
+	return inst
+}
+
+// GetTokenProgramAccount gets the "tokenProgram" account.
+func (inst *InitializeCandyMachine) GetTokenProgramAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(11)
+}
+
 func (inst InitializeCandyMachine) Build() *Instruction {
 	return &Instruction{BaseVariant: ag_binary.BaseVariant{
 		Impl:   inst,
@@ -197,7 +223,7 @@ func (inst *InitializeCandyMachine) Validate() error {
 			return errors.New("accounts.OrderInfo is not set")
 		}
 		if inst.AccountMetaSlice[3] == nil {
-			return errors.New("accounts.Wallet is not set")
+			return errors.New("accounts.WalletAuthority is not set")
 		}
 		if inst.AccountMetaSlice[4] == nil {
 			return errors.New("accounts.Config is not set")
@@ -217,6 +243,12 @@ func (inst *InitializeCandyMachine) Validate() error {
 		if inst.AccountMetaSlice[9] == nil {
 			return errors.New("accounts.Rent is not set")
 		}
+		if inst.AccountMetaSlice[10] == nil {
+			return errors.New("accounts.AssociatedTokenProgram is not set")
+		}
+		if inst.AccountMetaSlice[11] == nil {
+			return errors.New("accounts.TokenProgram is not set")
+		}
 	}
 	return nil
 }
@@ -235,17 +267,19 @@ func (inst *InitializeCandyMachine) EncodeToTree(parent ag_treeout.Branches) {
 					})
 
 					// Accounts of the instruction:
-					instructionBranch.Child("Accounts[len=10]").ParentFunc(func(accountsBranch ag_treeout.Branches) {
-						accountsBranch.Child(ag_format.Meta("    candyMachine", inst.AccountMetaSlice.Get(0)))
-						accountsBranch.Child(ag_format.Meta("launchStagesInfo", inst.AccountMetaSlice.Get(1)))
-						accountsBranch.Child(ag_format.Meta("       orderInfo", inst.AccountMetaSlice.Get(2)))
-						accountsBranch.Child(ag_format.Meta("          wallet", inst.AccountMetaSlice.Get(3)))
-						accountsBranch.Child(ag_format.Meta("          config", inst.AccountMetaSlice.Get(4)))
-						accountsBranch.Child(ag_format.Meta("       authority", inst.AccountMetaSlice.Get(5)))
-						accountsBranch.Child(ag_format.Meta("           payer", inst.AccountMetaSlice.Get(6)))
-						accountsBranch.Child(ag_format.Meta("          notary", inst.AccountMetaSlice.Get(7)))
-						accountsBranch.Child(ag_format.Meta("   systemProgram", inst.AccountMetaSlice.Get(8)))
-						accountsBranch.Child(ag_format.Meta("            rent", inst.AccountMetaSlice.Get(9)))
+					instructionBranch.Child("Accounts[len=12]").ParentFunc(func(accountsBranch ag_treeout.Branches) {
+						accountsBranch.Child(ag_format.Meta("          candyMachine", inst.AccountMetaSlice.Get(0)))
+						accountsBranch.Child(ag_format.Meta("      launchStagesInfo", inst.AccountMetaSlice.Get(1)))
+						accountsBranch.Child(ag_format.Meta("             orderInfo", inst.AccountMetaSlice.Get(2)))
+						accountsBranch.Child(ag_format.Meta("       walletAuthority", inst.AccountMetaSlice.Get(3)))
+						accountsBranch.Child(ag_format.Meta("                config", inst.AccountMetaSlice.Get(4)))
+						accountsBranch.Child(ag_format.Meta("             authority", inst.AccountMetaSlice.Get(5)))
+						accountsBranch.Child(ag_format.Meta("                 payer", inst.AccountMetaSlice.Get(6)))
+						accountsBranch.Child(ag_format.Meta("                notary", inst.AccountMetaSlice.Get(7)))
+						accountsBranch.Child(ag_format.Meta("         systemProgram", inst.AccountMetaSlice.Get(8)))
+						accountsBranch.Child(ag_format.Meta("                  rent", inst.AccountMetaSlice.Get(9)))
+						accountsBranch.Child(ag_format.Meta("associatedTokenProgram", inst.AccountMetaSlice.Get(10)))
+						accountsBranch.Child(ag_format.Meta("          tokenProgram", inst.AccountMetaSlice.Get(11)))
 					})
 				})
 		})
@@ -276,23 +310,27 @@ func NewInitializeCandyMachineInstruction(
 	candyMachine ag_solanago.PublicKey,
 	launchStagesInfo ag_solanago.PublicKey,
 	orderInfo ag_solanago.PublicKey,
-	wallet ag_solanago.PublicKey,
+	walletAuthority ag_solanago.PublicKey,
 	config ag_solanago.PublicKey,
 	authority ag_solanago.PublicKey,
 	payer ag_solanago.PublicKey,
 	notary ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
-	rent ag_solanago.PublicKey) *InitializeCandyMachine {
+	rent ag_solanago.PublicKey,
+	associatedTokenProgram ag_solanago.PublicKey,
+	tokenProgram ag_solanago.PublicKey) *InitializeCandyMachine {
 	return NewInitializeCandyMachineInstructionBuilder().
 		SetArgs(args).
 		SetCandyMachineAccount(candyMachine).
 		SetLaunchStagesInfoAccount(launchStagesInfo).
 		SetOrderInfoAccount(orderInfo).
-		SetWalletAccount(wallet).
+		SetWalletAuthorityAccount(walletAuthority).
 		SetConfigAccount(config).
 		SetAuthorityAccount(authority).
 		SetPayerAccount(payer).
 		SetNotaryAccount(notary).
 		SetSystemProgramAccount(systemProgram).
-		SetRentAccount(rent)
+		SetRentAccount(rent).
+		SetAssociatedTokenProgramAccount(associatedTokenProgram).
+		SetTokenProgramAccount(tokenProgram)
 }

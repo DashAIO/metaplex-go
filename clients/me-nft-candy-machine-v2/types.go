@@ -3,16 +3,22 @@
 package nft_candy_machine
 
 import (
+	"fmt"
 	ag_binary "github.com/gagliardetto/binary"
 	ag_solanago "github.com/gagliardetto/solana-go"
 )
 
 type LaunchStage struct {
-	StageType   LaunchStageType
-	StartTime   int64
-	EndTime     int64
-	WalletLimit *uint8 `bin:"optional"`
-	Price       uint64
+	StageType                   LaunchStageType
+	StartTime                   int64
+	EndTime                     int64
+	WalletLimit                 WalletLimitSpecification
+	Price                       uint64
+	StageSupply                 *uint32 `bin:"optional"`
+	PreviousStageUnmintedSupply uint32
+	MintedDuringStage           uint32
+	PaymentMint                 ag_solanago.PublicKey
+	PaymentAta                  ag_solanago.PublicKey
 }
 
 func (obj LaunchStage) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
@@ -31,9 +37,33 @@ func (obj LaunchStage) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error
 	if err != nil {
 		return err
 	}
-	// Serialize `WalletLimit` param (optional):
+	// Serialize `WalletLimit` param:
 	{
-		if obj.WalletLimit == nil {
+		tmp := walletLimitSpecificationContainer{}
+		switch realvalue := obj.WalletLimit.(type) {
+		case *WalletLimitSpecificationNoLimit:
+			tmp.Enum = 0
+			tmp.NoLimit = *realvalue
+		case *WalletLimitSpecificationFixedLimit:
+			tmp.Enum = 1
+			tmp.FixedLimit = *realvalue
+		case *WalletLimitSpecificationVariableLimit:
+			tmp.Enum = 2
+			tmp.VariableLimit = *realvalue
+		}
+		err := encoder.Encode(tmp)
+		if err != nil {
+			return err
+		}
+	}
+	// Serialize `Price` param:
+	err = encoder.Encode(obj.Price)
+	if err != nil {
+		return err
+	}
+	// Serialize `StageSupply` param (optional):
+	{
+		if obj.StageSupply == nil {
 			err = encoder.WriteBool(false)
 			if err != nil {
 				return err
@@ -43,14 +73,29 @@ func (obj LaunchStage) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error
 			if err != nil {
 				return err
 			}
-			err = encoder.Encode(obj.WalletLimit)
+			err = encoder.Encode(obj.StageSupply)
 			if err != nil {
 				return err
 			}
 		}
 	}
-	// Serialize `Price` param:
-	err = encoder.Encode(obj.Price)
+	// Serialize `PreviousStageUnmintedSupply` param:
+	err = encoder.Encode(obj.PreviousStageUnmintedSupply)
+	if err != nil {
+		return err
+	}
+	// Serialize `MintedDuringStage` param:
+	err = encoder.Encode(obj.MintedDuringStage)
+	if err != nil {
+		return err
+	}
+	// Serialize `PaymentMint` param:
+	err = encoder.Encode(obj.PaymentMint)
+	if err != nil {
+		return err
+	}
+	// Serialize `PaymentAta` param:
+	err = encoder.Encode(obj.PaymentAta)
 	if err != nil {
 		return err
 	}
@@ -73,21 +118,206 @@ func (obj *LaunchStage) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err er
 	if err != nil {
 		return err
 	}
-	// Deserialize `WalletLimit` (optional):
+	// Deserialize `WalletLimit`:
+	{
+		tmp := new(walletLimitSpecificationContainer)
+		err := decoder.Decode(tmp)
+		if err != nil {
+			return err
+		}
+		switch tmp.Enum {
+		case 0:
+			obj.WalletLimit = (*NoLimit)(&tmp.Enum)
+		case 1:
+			obj.WalletLimit = &tmp.FixedLimit
+		case 2:
+			obj.WalletLimit = (*VariableLimit)(&tmp.Enum)
+		default:
+			return fmt.Errorf("unknown enum index: %v", tmp.Enum)
+		}
+	}
+	// Deserialize `Price`:
+	err = decoder.Decode(&obj.Price)
+	if err != nil {
+		return err
+	}
+	// Deserialize `StageSupply` (optional):
 	{
 		ok, err := decoder.ReadBool()
 		if err != nil {
 			return err
 		}
 		if ok {
-			err = decoder.Decode(&obj.WalletLimit)
+			err = decoder.Decode(&obj.StageSupply)
 			if err != nil {
 				return err
 			}
 		}
 	}
+	// Deserialize `PreviousStageUnmintedSupply`:
+	err = decoder.Decode(&obj.PreviousStageUnmintedSupply)
+	if err != nil {
+		return err
+	}
+	// Deserialize `MintedDuringStage`:
+	err = decoder.Decode(&obj.MintedDuringStage)
+	if err != nil {
+		return err
+	}
+	// Deserialize `PaymentMint`:
+	err = decoder.Decode(&obj.PaymentMint)
+	if err != nil {
+		return err
+	}
+	// Deserialize `PaymentAta`:
+	err = decoder.Decode(&obj.PaymentAta)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type LaunchStageArgs struct {
+	StageType          LaunchStageType
+	StartTime          int64
+	EndTime            int64
+	WalletLimit        WalletLimitSpecification
+	Price              uint64
+	StageSupply        *uint32 `bin:"optional"`
+	PaymentMintIndex   uint8
+	PaymentMintAtaBump uint8
+}
+
+func (obj LaunchStageArgs) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	// Serialize `StageType` param:
+	err = encoder.Encode(obj.StageType)
+	if err != nil {
+		return err
+	}
+	// Serialize `StartTime` param:
+	err = encoder.Encode(obj.StartTime)
+	if err != nil {
+		return err
+	}
+	// Serialize `EndTime` param:
+	err = encoder.Encode(obj.EndTime)
+	if err != nil {
+		return err
+	}
+	// Serialize `WalletLimit` param:
+	{
+		tmp := walletLimitSpecificationContainer{}
+		switch realvalue := obj.WalletLimit.(type) {
+		case *WalletLimitSpecificationNoLimit:
+			tmp.Enum = 0
+			tmp.NoLimit = *realvalue
+		case *WalletLimitSpecificationFixedLimit:
+			tmp.Enum = 1
+			tmp.FixedLimit = *realvalue
+		case *WalletLimitSpecificationVariableLimit:
+			tmp.Enum = 2
+			tmp.VariableLimit = *realvalue
+		}
+		err := encoder.Encode(tmp)
+		if err != nil {
+			return err
+		}
+	}
+	// Serialize `Price` param:
+	err = encoder.Encode(obj.Price)
+	if err != nil {
+		return err
+	}
+	// Serialize `StageSupply` param (optional):
+	{
+		if obj.StageSupply == nil {
+			err = encoder.WriteBool(false)
+			if err != nil {
+				return err
+			}
+		} else {
+			err = encoder.WriteBool(true)
+			if err != nil {
+				return err
+			}
+			err = encoder.Encode(obj.StageSupply)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	// Serialize `PaymentMintIndex` param:
+	err = encoder.Encode(obj.PaymentMintIndex)
+	if err != nil {
+		return err
+	}
+	// Serialize `PaymentMintAtaBump` param:
+	err = encoder.Encode(obj.PaymentMintAtaBump)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (obj *LaunchStageArgs) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	// Deserialize `StageType`:
+	err = decoder.Decode(&obj.StageType)
+	if err != nil {
+		return err
+	}
+	// Deserialize `StartTime`:
+	err = decoder.Decode(&obj.StartTime)
+	if err != nil {
+		return err
+	}
+	// Deserialize `EndTime`:
+	err = decoder.Decode(&obj.EndTime)
+	if err != nil {
+		return err
+	}
+	// Deserialize `WalletLimit`:
+	{
+		tmp := new(walletLimitSpecificationContainer)
+		err := decoder.Decode(tmp)
+		if err != nil {
+			return err
+		}
+		switch tmp.Enum {
+		case 0:
+			obj.WalletLimit = (*NoLimit)(&tmp.Enum)
+		case 1:
+			obj.WalletLimit = &tmp.FixedLimit
+		case 2:
+			obj.WalletLimit = (*VariableLimit)(&tmp.Enum)
+		default:
+			return fmt.Errorf("unknown enum index: %v", tmp.Enum)
+		}
+	}
 	// Deserialize `Price`:
 	err = decoder.Decode(&obj.Price)
+	if err != nil {
+		return err
+	}
+	// Deserialize `StageSupply` (optional):
+	{
+		ok, err := decoder.ReadBool()
+		if err != nil {
+			return err
+		}
+		if ok {
+			err = decoder.Decode(&obj.StageSupply)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	// Deserialize `PaymentMintIndex`:
+	err = decoder.Decode(&obj.PaymentMintIndex)
+	if err != nil {
+		return err
+	}
+	// Deserialize `PaymentMintAtaBump`:
+	err = decoder.Decode(&obj.PaymentMintAtaBump)
 	if err != nil {
 		return err
 	}
@@ -99,7 +329,7 @@ type InitializeCandyMachineArgs struct {
 	LaunchStagesBump uint8
 	Uuid             string
 	ItemsAvailable   uint64
-	Stages           []LaunchStage
+	Stages           []LaunchStageArgs
 }
 
 func (obj InitializeCandyMachineArgs) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
@@ -334,3 +564,62 @@ func (value LaunchStageType) String() string {
 		return ""
 	}
 }
+
+type WalletLimitSpecification interface {
+	isWalletLimitSpecification()
+}
+
+type walletLimitSpecificationContainer struct {
+	Enum          ag_binary.BorshEnum `borsh_enum:"true"`
+	NoLimit       NoLimit
+	FixedLimit    WalletLimitSpecificationFixedLimit
+	VariableLimit VariableLimit
+}
+
+type NoLimit uint8
+
+func (obj NoLimit) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *NoLimit) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *NoLimit) isWalletLimitSpecification() {}
+
+type WalletLimitSpecificationFixedLimit struct {
+	Limit uint8
+}
+
+func (obj WalletLimitSpecificationFixedLimit) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	// Serialize `Limit` param:
+	err = encoder.Encode(obj.Limit)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (obj *WalletLimitSpecificationFixedLimit) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	// Deserialize `Limit`:
+	err = decoder.Decode(&obj.Limit)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (_ *WalletLimitSpecificationFixedLimit) isWalletLimitSpecification() {}
+
+type VariableLimit uint8
+
+func (obj VariableLimit) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	return nil
+}
+
+func (obj *VariableLimit) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	return nil
+}
+
+func (_ *VariableLimit) isWalletLimitSpecification() {}

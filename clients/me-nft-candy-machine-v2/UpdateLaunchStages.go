@@ -12,48 +12,100 @@ import (
 
 // UpdateLaunchStages is the `updateLaunchStages` instruction.
 type UpdateLaunchStages struct {
-	Stages *[]LaunchStage
+	Stages *[]LaunchStageArgs
 
-	// [0] = [WRITE] launchStagesInfo
+	// [0] = [] candyMachine
 	//
-	// [1] = [SIGNER] authority
+	// [1] = [WRITE] launchStagesInfo
+	//
+	// [2] = [SIGNER] authority
+	//
+	// [3] = [] associatedTokenProgram
+	//
+	// [4] = [] tokenProgram
+	//
+	// [5] = [] clock
 	ag_solanago.AccountMetaSlice `bin:"-"`
 }
 
 // NewUpdateLaunchStagesInstructionBuilder creates a new `UpdateLaunchStages` instruction builder.
 func NewUpdateLaunchStagesInstructionBuilder() *UpdateLaunchStages {
 	nd := &UpdateLaunchStages{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 2),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 6),
 	}
 	return nd
 }
 
 // SetStages sets the "stages" parameter.
-func (inst *UpdateLaunchStages) SetStages(stages []LaunchStage) *UpdateLaunchStages {
+func (inst *UpdateLaunchStages) SetStages(stages []LaunchStageArgs) *UpdateLaunchStages {
 	inst.Stages = &stages
 	return inst
 }
 
+// SetCandyMachineAccount sets the "candyMachine" account.
+func (inst *UpdateLaunchStages) SetCandyMachineAccount(candyMachine ag_solanago.PublicKey) *UpdateLaunchStages {
+	inst.AccountMetaSlice[0] = ag_solanago.Meta(candyMachine)
+	return inst
+}
+
+// GetCandyMachineAccount gets the "candyMachine" account.
+func (inst *UpdateLaunchStages) GetCandyMachineAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(0)
+}
+
 // SetLaunchStagesInfoAccount sets the "launchStagesInfo" account.
 func (inst *UpdateLaunchStages) SetLaunchStagesInfoAccount(launchStagesInfo ag_solanago.PublicKey) *UpdateLaunchStages {
-	inst.AccountMetaSlice[0] = ag_solanago.Meta(launchStagesInfo).WRITE()
+	inst.AccountMetaSlice[1] = ag_solanago.Meta(launchStagesInfo).WRITE()
 	return inst
 }
 
 // GetLaunchStagesInfoAccount gets the "launchStagesInfo" account.
 func (inst *UpdateLaunchStages) GetLaunchStagesInfoAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(0)
+	return inst.AccountMetaSlice.Get(1)
 }
 
 // SetAuthorityAccount sets the "authority" account.
 func (inst *UpdateLaunchStages) SetAuthorityAccount(authority ag_solanago.PublicKey) *UpdateLaunchStages {
-	inst.AccountMetaSlice[1] = ag_solanago.Meta(authority).SIGNER()
+	inst.AccountMetaSlice[2] = ag_solanago.Meta(authority).SIGNER()
 	return inst
 }
 
 // GetAuthorityAccount gets the "authority" account.
 func (inst *UpdateLaunchStages) GetAuthorityAccount() *ag_solanago.AccountMeta {
-	return inst.AccountMetaSlice.Get(1)
+	return inst.AccountMetaSlice.Get(2)
+}
+
+// SetAssociatedTokenProgramAccount sets the "associatedTokenProgram" account.
+func (inst *UpdateLaunchStages) SetAssociatedTokenProgramAccount(associatedTokenProgram ag_solanago.PublicKey) *UpdateLaunchStages {
+	inst.AccountMetaSlice[3] = ag_solanago.Meta(associatedTokenProgram)
+	return inst
+}
+
+// GetAssociatedTokenProgramAccount gets the "associatedTokenProgram" account.
+func (inst *UpdateLaunchStages) GetAssociatedTokenProgramAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(3)
+}
+
+// SetTokenProgramAccount sets the "tokenProgram" account.
+func (inst *UpdateLaunchStages) SetTokenProgramAccount(tokenProgram ag_solanago.PublicKey) *UpdateLaunchStages {
+	inst.AccountMetaSlice[4] = ag_solanago.Meta(tokenProgram)
+	return inst
+}
+
+// GetTokenProgramAccount gets the "tokenProgram" account.
+func (inst *UpdateLaunchStages) GetTokenProgramAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(4)
+}
+
+// SetClockAccount sets the "clock" account.
+func (inst *UpdateLaunchStages) SetClockAccount(clock ag_solanago.PublicKey) *UpdateLaunchStages {
+	inst.AccountMetaSlice[5] = ag_solanago.Meta(clock)
+	return inst
+}
+
+// GetClockAccount gets the "clock" account.
+func (inst *UpdateLaunchStages) GetClockAccount() *ag_solanago.AccountMeta {
+	return inst.AccountMetaSlice.Get(5)
 }
 
 func (inst UpdateLaunchStages) Build() *Instruction {
@@ -84,10 +136,22 @@ func (inst *UpdateLaunchStages) Validate() error {
 	// Check whether all (required) accounts are set:
 	{
 		if inst.AccountMetaSlice[0] == nil {
-			return errors.New("accounts.LaunchStagesInfo is not set")
+			return errors.New("accounts.CandyMachine is not set")
 		}
 		if inst.AccountMetaSlice[1] == nil {
+			return errors.New("accounts.LaunchStagesInfo is not set")
+		}
+		if inst.AccountMetaSlice[2] == nil {
 			return errors.New("accounts.Authority is not set")
+		}
+		if inst.AccountMetaSlice[3] == nil {
+			return errors.New("accounts.AssociatedTokenProgram is not set")
+		}
+		if inst.AccountMetaSlice[4] == nil {
+			return errors.New("accounts.TokenProgram is not set")
+		}
+		if inst.AccountMetaSlice[5] == nil {
+			return errors.New("accounts.Clock is not set")
 		}
 	}
 	return nil
@@ -107,9 +171,13 @@ func (inst *UpdateLaunchStages) EncodeToTree(parent ag_treeout.Branches) {
 					})
 
 					// Accounts of the instruction:
-					instructionBranch.Child("Accounts[len=2]").ParentFunc(func(accountsBranch ag_treeout.Branches) {
-						accountsBranch.Child(ag_format.Meta("launchStagesInfo", inst.AccountMetaSlice.Get(0)))
-						accountsBranch.Child(ag_format.Meta("       authority", inst.AccountMetaSlice.Get(1)))
+					instructionBranch.Child("Accounts[len=6]").ParentFunc(func(accountsBranch ag_treeout.Branches) {
+						accountsBranch.Child(ag_format.Meta("          candyMachine", inst.AccountMetaSlice.Get(0)))
+						accountsBranch.Child(ag_format.Meta("      launchStagesInfo", inst.AccountMetaSlice.Get(1)))
+						accountsBranch.Child(ag_format.Meta("             authority", inst.AccountMetaSlice.Get(2)))
+						accountsBranch.Child(ag_format.Meta("associatedTokenProgram", inst.AccountMetaSlice.Get(3)))
+						accountsBranch.Child(ag_format.Meta("          tokenProgram", inst.AccountMetaSlice.Get(4)))
+						accountsBranch.Child(ag_format.Meta("                 clock", inst.AccountMetaSlice.Get(5)))
 					})
 				})
 		})
@@ -135,12 +203,20 @@ func (obj *UpdateLaunchStages) UnmarshalWithDecoder(decoder *ag_binary.Decoder) 
 // NewUpdateLaunchStagesInstruction declares a new UpdateLaunchStages instruction with the provided parameters and accounts.
 func NewUpdateLaunchStagesInstruction(
 	// Parameters:
-	stages []LaunchStage,
+	stages []LaunchStageArgs,
 	// Accounts:
+	candyMachine ag_solanago.PublicKey,
 	launchStagesInfo ag_solanago.PublicKey,
-	authority ag_solanago.PublicKey) *UpdateLaunchStages {
+	authority ag_solanago.PublicKey,
+	associatedTokenProgram ag_solanago.PublicKey,
+	tokenProgram ag_solanago.PublicKey,
+	clock ag_solanago.PublicKey) *UpdateLaunchStages {
 	return NewUpdateLaunchStagesInstructionBuilder().
 		SetStages(stages).
+		SetCandyMachineAccount(candyMachine).
 		SetLaunchStagesInfoAccount(launchStagesInfo).
-		SetAuthorityAccount(authority)
+		SetAuthorityAccount(authority).
+		SetAssociatedTokenProgramAccount(associatedTokenProgram).
+		SetTokenProgramAccount(tokenProgram).
+		SetClockAccount(clock)
 }

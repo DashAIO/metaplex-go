@@ -10,8 +10,7 @@ import (
 
 type CandyMachine struct {
 	Authority              ag_solanago.PublicKey
-	Wallet                 ag_solanago.PublicKey
-	TokenMint              *ag_solanago.PublicKey `bin:"optional"`
+	WalletAuthority        ag_solanago.PublicKey
 	Config                 ag_solanago.PublicKey
 	ItemsRedeemedNormal    uint64
 	ItemsRedeemedRaffle    uint64
@@ -37,28 +36,10 @@ func (obj CandyMachine) MarshalWithEncoder(encoder *ag_binary.Encoder) (err erro
 	if err != nil {
 		return err
 	}
-	// Serialize `Wallet` param:
-	err = encoder.Encode(obj.Wallet)
+	// Serialize `WalletAuthority` param:
+	err = encoder.Encode(obj.WalletAuthority)
 	if err != nil {
 		return err
-	}
-	// Serialize `TokenMint` param (optional):
-	{
-		if obj.TokenMint == nil {
-			err = encoder.WriteBool(false)
-			if err != nil {
-				return err
-			}
-		} else {
-			err = encoder.WriteBool(true)
-			if err != nil {
-				return err
-			}
-			err = encoder.Encode(obj.TokenMint)
-			if err != nil {
-				return err
-			}
-		}
 	}
 	// Serialize `Config` param:
 	err = encoder.Encode(obj.Config)
@@ -145,23 +126,10 @@ func (obj *CandyMachine) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err e
 	if err != nil {
 		return err
 	}
-	// Deserialize `Wallet`:
-	err = decoder.Decode(&obj.Wallet)
+	// Deserialize `WalletAuthority`:
+	err = decoder.Decode(&obj.WalletAuthority)
 	if err != nil {
 		return err
-	}
-	// Deserialize `TokenMint` (optional):
-	{
-		ok, err := decoder.ReadBool()
-		if err != nil {
-			return err
-		}
-		if ok {
-			err = decoder.Decode(&obj.TokenMint)
-			if err != nil {
-				return err
-			}
-		}
 	}
 	// Deserialize `Config`:
 	err = decoder.Decode(&obj.Config)
@@ -282,6 +250,7 @@ type RaffleTicket struct {
 	CandyMachine ag_solanago.PublicKey
 	TicketBump   uint8
 	EscrowBump   uint8
+	RafflePayer  ag_solanago.PublicKey
 }
 
 var RaffleTicketDiscriminator = [8]byte{190, 224, 155, 165, 115, 94, 246, 119}
@@ -309,6 +278,11 @@ func (obj RaffleTicket) MarshalWithEncoder(encoder *ag_binary.Encoder) (err erro
 	}
 	// Serialize `EscrowBump` param:
 	err = encoder.Encode(obj.EscrowBump)
+	if err != nil {
+		return err
+	}
+	// Serialize `RafflePayer` param:
+	err = encoder.Encode(obj.RafflePayer)
 	if err != nil {
 		return err
 	}
@@ -346,6 +320,11 @@ func (obj *RaffleTicket) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err e
 	}
 	// Deserialize `EscrowBump`:
 	err = decoder.Decode(&obj.EscrowBump)
+	if err != nil {
+		return err
+	}
+	// Deserialize `RafflePayer`:
+	err = decoder.Decode(&obj.RafflePayer)
 	if err != nil {
 		return err
 	}
