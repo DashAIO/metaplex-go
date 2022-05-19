@@ -536,7 +536,7 @@ func NewMintNftInstruction(
 	tokenProgram ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
 	associatedTokenProgram ag_solanago.PublicKey,
-	rent ag_solanago.PublicKey
+	rent ag_solanago.PublicKey,
 	remainingAccounts []ag_solanago.AccountMeta) *MintNft {
 	return NewMintNftInstructionBuilder().
 		SetWalletLimitBump(walletLimitBump).
