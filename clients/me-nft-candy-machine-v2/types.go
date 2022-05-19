@@ -40,17 +40,6 @@ func (obj LaunchStage) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error
 	// Serialize `WalletLimit` param:
 	{
 		tmp := walletLimitSpecificationContainer{}
-		switch realvalue := obj.WalletLimit.(type) {
-		case *WalletLimitSpecificationNoLimit:
-			tmp.Enum = 0
-			tmp.NoLimit = *realvalue
-		case *WalletLimitSpecificationFixedLimit:
-			tmp.Enum = 1
-			tmp.FixedLimit = *realvalue
-		case *WalletLimitSpecificationVariableLimit:
-			tmp.Enum = 2
-			tmp.VariableLimit = *realvalue
-		}
 		err := encoder.Encode(tmp)
 		if err != nil {
 			return err
