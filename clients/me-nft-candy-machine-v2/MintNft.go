@@ -15,6 +15,7 @@ type MintNft struct {
 	WalletLimitBump *uint8
 	InOrder         *bool
 	UserLimit       *uint8 `bin:"optional"`
+	CurrTime	*int64
 
 	// [0] = [] config
 	//
@@ -81,6 +82,11 @@ func (inst *MintNft) SetInOrder(inOrder bool) *MintNft {
 // SetUserLimit sets the "userLimit" parameter.
 func (inst *MintNft) SetUserLimit(userLimit uint8) *MintNft {
 	inst.UserLimit = &userLimit
+	return inst
+}
+// SetCurrTime sets the "currTime" parameter.
+func (inst *MintNft) SetCurrTime(currTime int64) *MintNft {
+	inst.CurrTime = &currTime
 	return inst
 }
 
@@ -342,6 +348,9 @@ func (inst *MintNft) Validate() error {
 		if inst.InOrder == nil {
 			return errors.New("InOrder parameter is not set")
 		}
+		if inst.CurrTime == nil {
+			return errors.New("CurrTime parameter is not set")
+		}
 	}
 
 	// Check whether all (required) accounts are set:
@@ -423,6 +432,7 @@ func (inst *MintNft) EncodeToTree(parent ag_treeout.Branches) {
 						paramsBranch.Child(ag_format.Param("WalletLimitBump", *inst.WalletLimitBump))
 						paramsBranch.Child(ag_format.Param("        InOrder", *inst.InOrder))
 						paramsBranch.Child(ag_format.Param("      UserLimit (OPT)", inst.UserLimit))
+						paramsBranch.Child(ag_format.Param("CurrTime", *inst.CurrTime))
 					})
 
 					// Accounts of the instruction:
@@ -481,6 +491,11 @@ func (obj MintNft) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
 			}
 		}
 	}
+	// Serialize `CurrTime` param:
+	err = encoder.Encode(obj.CurrTime)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 func (obj *MintNft) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
@@ -507,6 +522,11 @@ func (obj *MintNft) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error)
 			}
 		}
 	}
+	// Deserialize `CurrTime`:
+	err = decoder.Decode(&obj.CurrTime)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -516,6 +536,7 @@ func NewMintNftInstruction(
 	walletLimitBump uint8,
 	inOrder bool,
 	userLimit uint8,
+	currTime int64,
 	// Accounts:
 	config ag_solanago.PublicKey,
 	candyMachine ag_solanago.PublicKey,
@@ -542,6 +563,7 @@ func NewMintNftInstruction(
 		SetWalletLimitBump(walletLimitBump).
 		SetInOrder(inOrder).
 		SetUserLimit(userLimit).
+		SetCurrTime(currTime).
 		SetConfigAccount(config).
 		SetCandyMachineAccount(candyMachine).
 		SetMintReceiverAccount(mintReceiver).
