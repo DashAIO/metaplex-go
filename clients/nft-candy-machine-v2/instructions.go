@@ -100,7 +100,7 @@ var InstructionImplDef = ag_binary.NewVariantDefinition(
 		},
 		{
 			"set_collection_during_mint", (*SetCollectionDuringMint)(nil),
-		}
+		},
 	},
 )
 
