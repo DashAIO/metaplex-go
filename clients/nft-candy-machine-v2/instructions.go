@@ -38,6 +38,8 @@ var (
 
 	Instruction_UpdateAuthority = ag_binary.TypeID([8]byte{32, 46, 64, 28, 149, 75, 243, 88})
 
+	Instruction_SetCollectionDuringMint = ag_binary.TypeID([8]byte{103, 17, 200, 25, 118, 95, 125, 61})
+	
 	Instruction_WithdrawFunds = ag_binary.TypeID([8]byte{241, 36, 29, 111, 208, 31, 104, 217})
 )
 
@@ -56,6 +58,8 @@ func InstructionIDToName(id ag_binary.TypeID) string {
 		return "UpdateAuthority"
 	case Instruction_WithdrawFunds:
 		return "WithdrawFunds"
+	case Instruction_SetCollectionDuringMint:
+		return "SetCollectionDuringMint"
 	default:
 		return ""
 	}
@@ -94,6 +98,9 @@ var InstructionImplDef = ag_binary.NewVariantDefinition(
 		{
 			"withdraw_funds", (*WithdrawFunds)(nil),
 		},
+		{
+			"set_collection_during_mint", (*SetCollectionDuringMint)(nil),
+		}
 	},
 )
 
