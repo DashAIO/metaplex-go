@@ -114,3 +114,56 @@ func (obj *CandyMachine) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err e
 	}
 	return nil
 }
+
+type CollectionPDA struct {
+	Mint         ag_solanago.PublicKey
+	CandyMachine ag_solanago.PublicKey
+}
+
+var CollectionPDADiscriminator = [8]byte{50, 183, 127, 103, 4, 213, 92, 53}
+
+func (obj CollectionPDA) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(CollectionPDADiscriminator[:], false)
+	if err != nil {
+		return err
+	}
+	// Serialize `Mint` param:
+	err = encoder.Encode(obj.Mint)
+	if err != nil {
+		return err
+	}
+	// Serialize `CandyMachine` param:
+	err = encoder.Encode(obj.CandyMachine)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (obj *CollectionPDA) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadTypeID()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(CollectionPDADiscriminator[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				"[50 183 127 103 4 213 92 53]",
+				fmt.Sprint(discriminator[:]))
+		}
+	}
+	// Deserialize `Mint`:
+	err = decoder.Decode(&obj.Mint)
+	if err != nil {
+		return err
+	}
+	// Deserialize `CandyMachine`:
+	err = decoder.Decode(&obj.CandyMachine)
+	if err != nil {
+		return err
+	}
+	return nil
+}
