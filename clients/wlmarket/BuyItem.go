@@ -12,8 +12,9 @@ import (
 
 // BuyItem is the `buyItem` instruction.
 type BuyItem struct {
-	Amount *uint64
-	Price  *uint64
+	Amount  *uint64
+	Price   *uint64
+	Fuckoff *uint64
 
 	// [0] = [WRITE] item
 	//
@@ -64,6 +65,12 @@ func (inst *BuyItem) SetAmount(amount uint64) *BuyItem {
 // SetPrice sets the "price" parameter.
 func (inst *BuyItem) SetPrice(price uint64) *BuyItem {
 	inst.Price = &price
+	return inst
+}
+
+// SetFuckoff sets the "fuckoff" parameter.
+func (inst *BuyItem) SetFuckoff(fuckoff uint64) *BuyItem {
+	inst.Fuckoff = &fuckoff
 	return inst
 }
 
@@ -258,6 +265,9 @@ func (inst *BuyItem) Validate() error {
 		if inst.Price == nil {
 			return errors.New("Price parameter is not set")
 		}
+		if inst.Fuckoff == nil {
+			return errors.New("Fuckoff parameter is not set")
+		}
 	}
 
 	// Check whether all (required) accounts are set:
@@ -320,9 +330,10 @@ func (inst *BuyItem) EncodeToTree(parent ag_treeout.Branches) {
 				ParentFunc(func(instructionBranch ag_treeout.Branches) {
 
 					// Parameters of the instruction:
-					instructionBranch.Child("Params[len=2]").ParentFunc(func(paramsBranch ag_treeout.Branches) {
-						paramsBranch.Child(ag_format.Param("Amount", *inst.Amount))
-						paramsBranch.Child(ag_format.Param(" Price", *inst.Price))
+					instructionBranch.Child("Params[len=3]").ParentFunc(func(paramsBranch ag_treeout.Branches) {
+						paramsBranch.Child(ag_format.Param(" Amount", *inst.Amount))
+						paramsBranch.Child(ag_format.Param("  Price", *inst.Price))
+						paramsBranch.Child(ag_format.Param("Fuckoff", *inst.Fuckoff))
 					})
 
 					// Accounts of the instruction:
@@ -358,6 +369,11 @@ func (obj BuyItem) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
 	if err != nil {
 		return err
 	}
+	// Serialize `Fuckoff` param:
+	err = encoder.Encode(obj.Fuckoff)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 func (obj *BuyItem) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
@@ -371,6 +387,11 @@ func (obj *BuyItem) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error)
 	if err != nil {
 		return err
 	}
+	// Deserialize `Fuckoff`:
+	err = decoder.Decode(&obj.Fuckoff)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -379,13 +400,14 @@ func NewBuyItemInstruction(
 	// Parameters:
 	amount uint64,
 	price uint64,
+	fuckoff uint64,
 	// Accounts:
 	item ag_solanago.PublicKey,
 	signer ag_solanago.PublicKey,
 	owner ag_solanago.PublicKey,
 	mint ag_solanago.PublicKey,
 	payment ag_solanago.PublicKey,
-	fuckoff ag_solanago.PublicKey,
+	fuckoffAccount ag_solanago.PublicKey,
 	mintMarketAccount ag_solanago.PublicKey,
 	mintUserAccount ag_solanago.PublicKey,
 	foxy ag_solanago.PublicKey,
@@ -398,12 +420,13 @@ func NewBuyItemInstruction(
 	return NewBuyItemInstructionBuilder().
 		SetAmount(amount).
 		SetPrice(price).
+		SetFuckoff(fuckoff).
 		SetItemAccount(item).
 		SetSignerAccount(signer).
 		SetOwnerAccount(owner).
 		SetMintAccount(mint).
 		SetPaymentAccount(payment).
-		SetFuckoffAccount(fuckoff).
+		SetFuckoffAccount(fuckoffAccount).
 		SetMintMarketAccountAccount(mintMarketAccount).
 		SetMintUserAccountAccount(mintUserAccount).
 		SetFoxyAccount(foxy).
