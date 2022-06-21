@@ -12,9 +12,10 @@ import (
 
 // BuyItem is the `buyItem` instruction.
 type BuyItem struct {
-	Amount  *uint64
-	Price   *uint64
-	Fuckoff *uint64
+	Sixtynine *uint64
+	Amount    *uint64
+	Price     *uint64
+	Fuckoff   *uint64
 
 	// [0] = [WRITE] item
 	//
@@ -54,6 +55,12 @@ func NewBuyItemInstructionBuilder() *BuyItem {
 		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 15),
 	}
 	return nd
+}
+
+// SetSixtynine sets the "sixtynine" parameter.
+func (inst *BuyItem) SetSixtynine(sixtynine uint64) *BuyItem {
+	inst.Sixtynine = &sixtynine
+	return inst
 }
 
 // SetAmount sets the "amount" parameter.
@@ -259,6 +266,9 @@ func (inst BuyItem) ValidateAndBuild() (*Instruction, error) {
 func (inst *BuyItem) Validate() error {
 	// Check whether all (required) parameters are set:
 	{
+		if inst.Sixtynine == nil {
+			return errors.New("Sixtynine parameter is not set")
+		}
 		if inst.Amount == nil {
 			return errors.New("Amount parameter is not set")
 		}
@@ -330,10 +340,11 @@ func (inst *BuyItem) EncodeToTree(parent ag_treeout.Branches) {
 				ParentFunc(func(instructionBranch ag_treeout.Branches) {
 
 					// Parameters of the instruction:
-					instructionBranch.Child("Params[len=3]").ParentFunc(func(paramsBranch ag_treeout.Branches) {
-						paramsBranch.Child(ag_format.Param(" Amount", *inst.Amount))
-						paramsBranch.Child(ag_format.Param("  Price", *inst.Price))
-						paramsBranch.Child(ag_format.Param("Fuckoff", *inst.Fuckoff))
+					instructionBranch.Child("Params[len=4]").ParentFunc(func(paramsBranch ag_treeout.Branches) {
+						paramsBranch.Child(ag_format.Param("Sixtynine", *inst.Sixtynine))
+						paramsBranch.Child(ag_format.Param("   Amount", *inst.Amount))
+						paramsBranch.Child(ag_format.Param("    Price", *inst.Price))
+						paramsBranch.Child(ag_format.Param("  Fuckoff", *inst.Fuckoff))
 					})
 
 					// Accounts of the instruction:
@@ -359,6 +370,11 @@ func (inst *BuyItem) EncodeToTree(parent ag_treeout.Branches) {
 }
 
 func (obj BuyItem) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	// Serialize `Sixtynine` param:
+	err = encoder.Encode(obj.Sixtynine)
+	if err != nil {
+		return err
+	}
 	// Serialize `Amount` param:
 	err = encoder.Encode(obj.Amount)
 	if err != nil {
@@ -377,6 +393,11 @@ func (obj BuyItem) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
 	return nil
 }
 func (obj *BuyItem) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	// Deserialize `Sixtynine`:
+	err = decoder.Decode(&obj.Sixtynine)
+	if err != nil {
+		return err
+	}
 	// Deserialize `Amount`:
 	err = decoder.Decode(&obj.Amount)
 	if err != nil {
@@ -398,6 +419,7 @@ func (obj *BuyItem) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error)
 // NewBuyItemInstruction declares a new BuyItem instruction with the provided parameters and accounts.
 func NewBuyItemInstruction(
 	// Parameters:
+	sixtynine uint64,
 	amount uint64,
 	price uint64,
 	fuckoff uint64,
@@ -418,6 +440,7 @@ func NewBuyItemInstruction(
 	systemProgram ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey) *BuyItem {
 	return NewBuyItemInstructionBuilder().
+		SetSixtynine(sixtynine).
 		SetAmount(amount).
 		SetPrice(price).
 		SetFuckoff(fuckoff).
