@@ -13,7 +13,7 @@ import (
 // MintExpected is the `mintExpected` instruction.
 type MintExpected struct {
 	Proof *[][32]uint8 `bin:"optional"`
-	Price uint64
+	Price *uint64
 
 	// [0] = [WRITE] candyMachine
 	//
