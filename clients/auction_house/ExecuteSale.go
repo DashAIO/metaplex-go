@@ -577,7 +577,7 @@ func NewExecuteSaleInstruction(
 	ataProgram ag_solanago.PublicKey,
 	programAsSigner ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey,
-	additionalAccounts []*ag_solanago.AccountMeta) *ExecuteSale {
+	additionalAccounts []ag_solanago.AccountMeta) *ExecuteSale {
 	return NewExecuteSaleInstructionBuilder().
 		SetEscrowPaymentBump(escrowPaymentBump).
 		SetFreeTradeStateBump(freeTradeStateBump).
