@@ -65,7 +65,7 @@ type ExecuteSale struct {
 // NewExecuteSaleInstructionBuilder creates a new `ExecuteSale` instruction builder.
 func NewExecuteSaleInstructionBuilder() *ExecuteSale {
 	nd := &ExecuteSale{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 21),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 25),
 	}
 	return nd
 }
@@ -326,6 +326,14 @@ func (inst *ExecuteSale) SetRentAccount(rent ag_solanago.PublicKey) *ExecuteSale
 	return inst
 }
 
+// SetAdditionalAccounts sets the additional creator accounts.
+func (inst *ExecuteSale) SetAdditionalAccounts(additionalAccounts []*ag_solanago.AccountMeta) *ExecuteSale {
+	for i, creator := range(additionalAccounts) {
+		inst.AccountMetaSlice[20+i] = creator
+	}
+	return inst
+}
+
 // GetRentAccount gets the "rent" account.
 func (inst *ExecuteSale) GetRentAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(20)
@@ -568,7 +576,8 @@ func NewExecuteSaleInstruction(
 	systemProgram ag_solanago.PublicKey,
 	ataProgram ag_solanago.PublicKey,
 	programAsSigner ag_solanago.PublicKey,
-	rent ag_solanago.PublicKey) *ExecuteSale {
+	rent ag_solanago.PublicKey,
+	additionalAccounts []*ag_solanago.AccountMeta) *ExecuteSale {
 	return NewExecuteSaleInstructionBuilder().
 		SetEscrowPaymentBump(escrowPaymentBump).
 		SetFreeTradeStateBump(freeTradeStateBump).
@@ -595,5 +604,6 @@ func NewExecuteSaleInstruction(
 		SetSystemProgramAccount(systemProgram).
 		SetAtaProgramAccount(ataProgram).
 		SetProgramAsSignerAccount(programAsSigner).
-		SetRentAccount(rent)
+		SetRentAccount(rent).
+		SetAdditionalAccounts(additionalAccounts)
 }
