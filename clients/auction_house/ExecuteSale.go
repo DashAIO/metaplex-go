@@ -328,8 +328,8 @@ func (inst *ExecuteSale) SetRentAccount(rent ag_solanago.PublicKey) *ExecuteSale
 
 // SetAdditionalAccounts sets the additional creator accounts.
 func (inst *ExecuteSale) SetAdditionalAccounts(additionalAccounts []ag_solanago.AccountMeta) *ExecuteSale {
-	for i, creator := range additionalAccounts {
-		inst.AccountMetaSlice[21+i] = &creator
+	for i := 0; i < len(additionalAccounts); i++ {
+		inst.AccountMetaSlice[21+i] = &additionalAccounts[i]
 	}
 	return inst
 }
