@@ -413,7 +413,7 @@ func NewMintEInstruction(
 	tokenProgram ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey,
-	clock ag_solanago.PublicKey) *MintExpected {
+	clock ag_solanago.PublicKey) *MintE {
 	return NewMintEInstructionBuilder().
 		SetProof(proof).
 		SetPrice(price).
