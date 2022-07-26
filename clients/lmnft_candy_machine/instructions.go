@@ -28,7 +28,7 @@ func init() {
 }
 
 var (
-	Instruction_MintE = ag_binary.TypeID([8]byte{188, 37, 176, 160, 121, 12, 20, 199})
+	Instruction_MintE = ag_binary.TypeID([8]byte{212, 19, 195, 142, 66, 203, 8, 222})
 
 	Instruction_MintV2 = ag_binary.TypeID([8]byte{120, 121, 23, 146, 173, 110, 199, 205})
 
