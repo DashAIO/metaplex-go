@@ -12,7 +12,7 @@ import (
 
 // MintE is the `mintE` instruction.
 type MintE struct {
-	Proof *[][32]uint8 `bin:"optional"`
+	Proof *[][4]uint8 `bin:"optional"`
 	Price *uint64
 
 	// [0] = [WRITE] candyMachine
