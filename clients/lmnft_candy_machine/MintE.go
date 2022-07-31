@@ -56,7 +56,7 @@ func NewMintEInstructionBuilder() *MintE {
 }
 
 // SetProof sets the "proof" parameter.
-func (inst *MintE) SetProof(proof [][32]uint8) *MintE {
+func (inst *MintE) SetProof(proof [][4]uint8) *MintE {
 	inst.Proof = &proof
 	return inst
 }
