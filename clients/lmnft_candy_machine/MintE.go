@@ -12,7 +12,7 @@ import (
 
 // MintE is the `mintE` instruction.
 type MintE struct {
-	Proof *[4]uint8 `bin:"optional"`
+	Proof [4]uint8 `bin:"optional"`
 	Price *uint64
 
 	// [0] = [WRITE] candyMachine
@@ -57,7 +57,7 @@ func NewMintEInstructionBuilder() *MintE {
 
 // SetProof sets the "proof" parameter.
 func (inst *MintE) SetProof(proof [4]uint8) *MintE {
-	inst.Proof = &proof
+	inst.Proof = proof
 	return inst
 }
 
