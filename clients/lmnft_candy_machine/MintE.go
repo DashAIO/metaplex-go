@@ -12,7 +12,7 @@ import (
 
 // MintE is the `mintE` instruction.
 type MintE struct {
-	Proof *[3]uint8 `bin:"optional"`
+	Proof *[4]uint8 `bin:"optional"`
 	Price *uint64
 
 	// [0] = [WRITE] candyMachine
@@ -56,7 +56,7 @@ func NewMintEInstructionBuilder() *MintE {
 }
 
 // SetProof sets the "proof" parameter.
-func (inst *MintE) SetProof(proof [3]uint8) *MintE {
+func (inst *MintE) SetProof(proof [4]uint8) *MintE {
 	inst.Proof = &proof
 	return inst
 }
@@ -396,7 +396,7 @@ func (obj *MintE) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
 // NewMintEInstruction declares a new MintE instruction with the provided parameters and accounts.
 func NewMintEInstruction(
 	// Parameters:
-	proof [3]uint8,
+	proof [4]uint8,
 	price uint64,
 	// Accounts:
 	candyMachine ag_solanago.PublicKey,
