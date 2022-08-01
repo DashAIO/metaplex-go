@@ -5,16 +5,16 @@ import (
 	"fmt"
 
 	"github.com/davecgh/go-spew/spew"
+	"github.com/desperatee/solana-go"
+	atok "github.com/desperatee/solana-go/programs/associated-token-account"
+	"github.com/desperatee/solana-go/programs/system"
+	"github.com/desperatee/solana-go/programs/token"
+	"github.com/desperatee/solana-go/rpc"
+	sendAndConfirmTransaction "github.com/desperatee/solana-go/rpc/sendAndConfirmTransaction"
+	"github.com/desperatee/solana-go/rpc/ws"
 	bin "github.com/gagliardetto/binary"
 	nftcandymachinev2 "github.com/gagliardetto/metaplex-go/clients/nft-candy-machine-v2"
 	token_metadata "github.com/gagliardetto/metaplex-go/clients/token-metadata"
-	"github.com/gagliardetto/solana-go"
-	atok "github.com/gagliardetto/solana-go/programs/associated-token-account"
-	"github.com/gagliardetto/solana-go/programs/system"
-	"github.com/gagliardetto/solana-go/programs/token"
-	"github.com/gagliardetto/solana-go/rpc"
-	sendAndConfirmTransaction "github.com/gagliardetto/solana-go/rpc/sendAndConfirmTransaction"
-	"github.com/gagliardetto/solana-go/rpc/ws"
 )
 
 var candyMachineV2ProgramID = solana.MustPublicKeyFromBase58("cndyAnrLdpjq1Ssp1z8xxDsB8dxe7u4HL5Nxi2K5WXZ")
