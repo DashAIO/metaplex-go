@@ -28,7 +28,7 @@ func init() {
 }
 
 var (
-	Instruction_MintE = ag_binary.TypeID([8]byte{212, 19, 195, 142, 66, 203, 8, 222})
+	Instruction_MintEmbed = ag_binary.TypeID([8]byte{133, 221, 27, 96, 4, 65, 206, 186})
 
 	Instruction_MintV2 = ag_binary.TypeID([8]byte{120, 121, 23, 146, 173, 110, 199, 205})
 
@@ -56,8 +56,8 @@ var (
 // InstructionIDToName returns the name of the instruction given its ID.
 func InstructionIDToName(id ag_binary.TypeID) string {
 	switch id {
-	case Instruction_MintE:
-		return "MintE"
+	case Instruction_MintEmbed:
+		return "MintEmbed"
 	case Instruction_MintV2:
 		return "MintV2"
 	case Instruction_UpdateCandyMachine:
@@ -101,7 +101,7 @@ var InstructionImplDef = ag_binary.NewVariantDefinition(
 	ag_binary.AnchorTypeIDEncoding,
 	[]ag_binary.VariantType{
 		{
-			"mint_e", (*MintE)(nil),
+			"mint_embed", (*MintEmbed)(nil),
 		},
 		{
 			"mint_v2", (*MintV2)(nil),
