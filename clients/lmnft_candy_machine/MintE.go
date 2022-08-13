@@ -10,9 +10,9 @@ import (
 	ag_treeout "github.com/gagliardetto/treeout"
 )
 
-// MintE is the `mintE` instruction.
-type MintE struct {
-	Proof *[4]uint8 `bin:"optional"`
+// MintEmbed is the `mintEmbed` instruction.
+type MintEmbed struct {
+	Proof *[][]uint8 `bin:"optional"`
 	Price *uint64
 
 	// [0] = [WRITE] candyMachine
@@ -47,210 +47,210 @@ type MintE struct {
 	ag_solanago.AccountMetaSlice `bin:"-"`
 }
 
-// NewMintEInstructionBuilder creates a new `MintE` instruction builder.
-func NewMintEInstructionBuilder() *MintE {
-	nd := &MintE{
+// NewMintEInstructionBuilder creates a new `MintEmbed` instruction builder.
+func NewMintEInstructionBuilder() *MintEmbed {
+	nd := &MintEmbed{
 		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 15),
 	}
 	return nd
 }
 
 // SetProof sets the "proof" parameter.
-func (inst *MintE) SetProof(proof [4]uint8) *MintE {
+func (inst *MintEmbed) SetProof(proof [][]uint8) *MintEmbed {
 	inst.Proof = &proof
 	return inst
 }
 
 // SetPrice sets the "price" parameter.
-func (inst *MintE) SetPrice(price uint64) *MintE {
+func (inst *MintEmbed) SetPrice(price uint64) *MintEmbed {
 	inst.Price = &price
 	return inst
 }
 
 
 // SetCandyMachineAccount sets the "candyMachine" account.
-func (inst *MintE) SetCandyMachineAccount(candyMachine ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetCandyMachineAccount(candyMachine ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[0] = ag_solanago.Meta(candyMachine).WRITE()
 	return inst
 }
 
 // GetCandyMachineAccount gets the "candyMachine" account.
-func (inst *MintE) GetCandyMachineAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetCandyMachineAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(0)
 }
 
 // SetPayerAccount sets the "payer" account.
-func (inst *MintE) SetPayerAccount(payer ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetPayerAccount(payer ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[1] = ag_solanago.Meta(payer).WRITE().SIGNER()
 	return inst
 }
 
 // GetPayerAccount gets the "payer" account.
-func (inst *MintE) GetPayerAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetPayerAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(1)
 }
 
 // SetWalletAccount sets the "wallet" account.
-func (inst *MintE) SetWalletAccount(wallet ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetWalletAccount(wallet ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[2] = ag_solanago.Meta(wallet).WRITE()
 	return inst
 }
 
 // GetWalletAccount gets the "wallet" account.
-func (inst *MintE) GetWalletAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetWalletAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(2)
 }
 
 // SetWallet2Account sets the "wallet2" account.
-func (inst *MintE) SetWallet2Account(wallet2 ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetWallet2Account(wallet2 ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[3] = ag_solanago.Meta(wallet2).WRITE()
 	return inst
 }
 
 // GetWallet2Account gets the "wallet2" account.
-func (inst *MintE) GetWallet2Account() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetWallet2Account() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(3)
 }
 
 // SetMetadataAccount sets the "metadata" account.
-func (inst *MintE) SetMetadataAccount(metadata ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetMetadataAccount(metadata ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[4] = ag_solanago.Meta(metadata).WRITE()
 	return inst
 }
 
 // GetMetadataAccount gets the "metadata" account.
-func (inst *MintE) GetMetadataAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetMetadataAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(4)
 }
 
 // SetMintAccount sets the "mint" account.
-func (inst *MintE) SetMintAccount(mint ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetMintAccount(mint ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[5] = ag_solanago.Meta(mint).WRITE().SIGNER()
 	return inst
 }
 
 // GetMintAccount gets the "mint" account.
-func (inst *MintE) GetMintAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetMintAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(5)
 }
 
 // SetAssociatedAccount sets the "associated" account.
-func (inst *MintE) SetAssociatedAccount(associated ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetAssociatedAccount(associated ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[6] = ag_solanago.Meta(associated).WRITE()
 	return inst
 }
 
 // GetAssociatedAccount gets the "associated" account.
-func (inst *MintE) GetAssociatedAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetAssociatedAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(6)
 }
 
 // SetMasterEditionAccount sets the "masterEdition" account.
-func (inst *MintE) SetMasterEditionAccount(masterEdition ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetMasterEditionAccount(masterEdition ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[7] = ag_solanago.Meta(masterEdition).WRITE()
 	return inst
 }
 
 // GetMasterEditionAccount gets the "masterEdition" account.
-func (inst *MintE) GetMasterEditionAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetMasterEditionAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(7)
 }
 
 // SetTotalMintsAccount sets the "totalMints" account.
-func (inst *MintE) SetTotalMintsAccount(totalMints ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetTotalMintsAccount(totalMints ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[8] = ag_solanago.Meta(totalMints).WRITE()
 	return inst
 }
 
 // GetTotalMintsAccount gets the "totalMints" account.
-func (inst *MintE) GetTotalMintsAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetTotalMintsAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(8)
 }
 
 // SetAssociatedTokenProgramAccount sets the "associatedTokenProgram" account.
-func (inst *MintE) SetAssociatedTokenProgramAccount(associatedTokenProgram ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetAssociatedTokenProgramAccount(associatedTokenProgram ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[9] = ag_solanago.Meta(associatedTokenProgram)
 	return inst
 }
 
 // GetAssociatedTokenProgramAccount gets the "associatedTokenProgram" account.
-func (inst *MintE) GetAssociatedTokenProgramAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetAssociatedTokenProgramAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(9)
 }
 
 // SetTokenMetadataProgramAccount sets the "tokenMetadataProgram" account.
-func (inst *MintE) SetTokenMetadataProgramAccount(tokenMetadataProgram ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetTokenMetadataProgramAccount(tokenMetadataProgram ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[10] = ag_solanago.Meta(tokenMetadataProgram)
 	return inst
 }
 
 // GetTokenMetadataProgramAccount gets the "tokenMetadataProgram" account.
-func (inst *MintE) GetTokenMetadataProgramAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetTokenMetadataProgramAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(10)
 }
 
 // SetTokenProgramAccount sets the "tokenProgram" account.
-func (inst *MintE) SetTokenProgramAccount(tokenProgram ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetTokenProgramAccount(tokenProgram ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[11] = ag_solanago.Meta(tokenProgram)
 	return inst
 }
 
 // GetTokenProgramAccount gets the "tokenProgram" account.
-func (inst *MintE) GetTokenProgramAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetTokenProgramAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(11)
 }
 
 // SetSystemProgramAccount sets the "systemProgram" account.
-func (inst *MintE) SetSystemProgramAccount(systemProgram ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetSystemProgramAccount(systemProgram ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[12] = ag_solanago.Meta(systemProgram)
 	return inst
 }
 
 // GetSystemProgramAccount gets the "systemProgram" account.
-func (inst *MintE) GetSystemProgramAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetSystemProgramAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(12)
 }
 
 // SetRentAccount sets the "rent" account.
-func (inst *MintE) SetRentAccount(rent ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetRentAccount(rent ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[13] = ag_solanago.Meta(rent)
 	return inst
 }
 
 // GetRentAccount gets the "rent" account.
-func (inst *MintE) GetRentAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetRentAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(13)
 }
 
 // SetClockAccount sets the "clock" account.
-func (inst *MintE) SetClockAccount(clock ag_solanago.PublicKey) *MintE {
+func (inst *MintEmbed) SetClockAccount(clock ag_solanago.PublicKey) *MintEmbed {
 	inst.AccountMetaSlice[14] = ag_solanago.Meta(clock)
 	return inst
 }
 
 // GetClockAccount gets the "clock" account.
-func (inst *MintE) GetClockAccount() *ag_solanago.AccountMeta {
+func (inst *MintEmbed) GetClockAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(14)
 }
 
-func (inst MintE) Build() *Instruction {
+func (inst MintEmbed) Build() *Instruction {
 	return &Instruction{BaseVariant: ag_binary.BaseVariant{
 		Impl:   inst,
-		TypeID: Instruction_MintE,
+		TypeID: Instruction_MintEmbed,
 	}}
 }
 
 // ValidateAndBuild validates the instruction parameters and accounts;
 // if there is a validation error, it returns the error.
 // Otherwise, it builds and returns the instruction.
-func (inst MintE) ValidateAndBuild() (*Instruction, error) {
+func (inst MintEmbed) ValidateAndBuild() (*Instruction, error) {
 	if err := inst.Validate(); err != nil {
 		return nil, err
 	}
 	return inst.Build(), nil
 }
 
-func (inst *MintE) Validate() error {
+func (inst *MintEmbed) Validate() error {
 	// Check whether all (required) parameters are set:
 	{
 	}
@@ -306,11 +306,11 @@ func (inst *MintE) Validate() error {
 	return nil
 }
 
-func (inst *MintE) EncodeToTree(parent ag_treeout.Branches) {
+func (inst *MintEmbed) EncodeToTree(parent ag_treeout.Branches) {
 	parent.Child(ag_format.Program(ProgramName, ProgramID)).
 		//
 		ParentFunc(func(programBranch ag_treeout.Branches) {
-			programBranch.Child(ag_format.Instruction("MintE")).
+			programBranch.Child(ag_format.Instruction("MintEmbed")).
 				//
 				ParentFunc(func(instructionBranch ag_treeout.Branches) {
 
@@ -341,7 +341,7 @@ func (inst *MintE) EncodeToTree(parent ag_treeout.Branches) {
 		})
 }
 
-func (obj MintE) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+func (obj MintEmbed) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
 	// Serialize `Proof` param (optional):
 	{
 		if obj.Proof == nil {
@@ -369,7 +369,7 @@ func (obj MintE) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
 	}
 	return nil
 }
-func (obj *MintE) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+func (obj *MintEmbed) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
 	// Deserialize `Proof` (optional):
 	{
 		ok, err := decoder.ReadBool()
@@ -393,10 +393,10 @@ func (obj *MintE) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
 	return nil
 }
 
-// NewMintEInstruction declares a new MintE instruction with the provided parameters and accounts.
-func NewMintEInstruction(
+// NewMintEmbedInstruction declares a new MintEmbed instruction with the provided parameters and accounts.
+func NewMintEmbedInstruction(
 	// Parameters:
-	proof [4]uint8,
+	proof [][]uint8,
 	price uint64,
 	// Accounts:
 	candyMachine ag_solanago.PublicKey,
@@ -414,7 +414,7 @@ func NewMintEInstruction(
 	systemProgram ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey,
 	clock ag_solanago.PublicKey) *MintE {
-	return NewMintEInstructionBuilder().
+	return NewMintEmbedInstructionBuilder().
 		SetProof(proof).
 		SetPrice(price).
 		SetCandyMachineAccount(candyMachine).
