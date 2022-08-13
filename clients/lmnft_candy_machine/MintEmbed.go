@@ -12,7 +12,7 @@ import (
 
 // MintEmbed is the `mintEmbed` instruction.
 type MintEmbed struct {
-	Proof *[]byte `bin:"optional"`
+	Proof *[][32]uint8 `bin:"optional"`
 	Price *uint64
 
 	// [0] = [WRITE] candyMachine
@@ -56,7 +56,7 @@ func NewMintEmbedInstructionBuilder() *MintEmbed {
 }
 
 // SetProof sets the "proof" parameter.
-func (inst *MintEmbed) SetProof(proof []byte) *MintEmbed {
+func (inst *MintEmbed) SetProof(proof [][32]uint8) *MintEmbed {
 	inst.Proof = &proof
 	return inst
 }
@@ -396,7 +396,7 @@ func (obj *MintEmbed) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err erro
 // NewMintEmbedInstruction declares a new MintEmbed instruction with the provided parameters and accounts.
 func NewMintEmbedInstruction(
 	// Parameters:
-	proof []byte,
+	proof [][32]uint8,
 	price uint64,
 	// Accounts:
 	candyMachine ag_solanago.PublicKey,
