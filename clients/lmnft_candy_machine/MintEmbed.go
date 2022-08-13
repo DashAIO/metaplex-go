@@ -413,7 +413,7 @@ func NewMintEmbedInstruction(
 	tokenProgram ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey,
-	clock ag_solanago.PublicKey) *MintE {
+	clock ag_solanago.PublicKey) *MintEmbed {
 	return NewMintEmbedInstructionBuilder().
 		SetProof(proof).
 		SetPrice(price).
