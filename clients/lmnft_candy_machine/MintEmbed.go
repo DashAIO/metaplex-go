@@ -47,8 +47,8 @@ type MintEmbed struct {
 	ag_solanago.AccountMetaSlice `bin:"-"`
 }
 
-// NewMintEInstructionBuilder creates a new `MintEmbed` instruction builder.
-func NewMintEInstructionBuilder() *MintEmbed {
+// NewMintEmbedInstructionBuilder creates a new `MintEmbed` instruction builder.
+func NewMintEmbedInstructionBuilder() *MintEmbed {
 	nd := &MintEmbed{
 		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 15),
 	}
