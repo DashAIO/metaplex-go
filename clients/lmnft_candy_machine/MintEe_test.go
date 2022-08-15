@@ -10,19 +10,19 @@ import (
 	"testing"
 )
 
-func TestEncodeDecode_MintEmbed(t *testing.T) {
+func TestEncodeDecode_MintEe(t *testing.T) {
 	fu := ag_gofuzz.New().NilChance(0)
 	for i := 0; i < 1; i++ {
-		t.Run("MintEmbed"+strconv.Itoa(i), func(t *testing.T) {
+		t.Run("MintEe"+strconv.Itoa(i), func(t *testing.T) {
 			{
-				params := new(MintEmbed)
+				params := new(MintEe)
 				fu.Fuzz(params)
 				params.AccountMetaSlice = nil
 				buf := new(bytes.Buffer)
 				err := encodeT(*params, buf)
 				ag_require.NoError(t, err)
 				//
-				got := new(MintEmbed)
+				got := new(MintEe)
 				err = decodeT(got, buf.Bytes())
 				got.AccountMetaSlice = nil
 				ag_require.NoError(t, err)
