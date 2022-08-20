@@ -243,7 +243,7 @@ func (inst MintEmbed) Build() *Instruction {
 // ValidateAndBuild validates the instruction parameters and accounts;
 // if there is a validation error, it returns the error.
 // Otherwise, it builds and returns the instruction.
-func (inst MintEe) ValidateAndBuild() (*Instruction, error) {
+func (inst MintEmbed) ValidateAndBuild() (*Instruction, error) {
 	if err := inst.Validate(); err != nil {
 		return nil, err
 	}
