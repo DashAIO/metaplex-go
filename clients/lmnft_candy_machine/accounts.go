@@ -394,6 +394,178 @@ func (obj *CandyMachineV3) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err
 	return nil
 }
 
+type CandyMachineV4 struct {
+	Seed          ag_solanago.PublicKey
+	Bump          uint8
+	Authority     ag_solanago.PublicKey
+	Wallet        ag_solanago.PublicKey
+	ItemsRedeemed uint64
+	Data          CandyMachineDataV2
+	ThawDate      *int64 `bin:"optional"`
+	AllowThaw     bool
+	RevealedURI   *string `bin:"optional"`
+}
+
+var CandyMachineV4Discriminator = [8]byte{247, 230, 179, 162, 114, 0, 193, 179}
+
+func (obj CandyMachineV4) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
+	// Write account discriminator:
+	err = encoder.WriteBytes(CandyMachineV4Discriminator[:], false)
+	if err != nil {
+		return err
+	}
+	// Serialize `Seed` param:
+	err = encoder.Encode(obj.Seed)
+	if err != nil {
+		return err
+	}
+	// Serialize `Bump` param:
+	err = encoder.Encode(obj.Bump)
+	if err != nil {
+		return err
+	}
+	// Serialize `Authority` param:
+	err = encoder.Encode(obj.Authority)
+	if err != nil {
+		return err
+	}
+	// Serialize `Wallet` param:
+	err = encoder.Encode(obj.Wallet)
+	if err != nil {
+		return err
+	}
+	// Serialize `ItemsRedeemed` param:
+	err = encoder.Encode(obj.ItemsRedeemed)
+	if err != nil {
+		return err
+	}
+	// Serialize `Data` param:
+	err = encoder.Encode(obj.Data)
+	if err != nil {
+		return err
+	}
+	// Serialize `ThawDate` param (optional):
+	{
+		if obj.ThawDate == nil {
+			err = encoder.WriteBool(false)
+			if err != nil {
+				return err
+			}
+		} else {
+			err = encoder.WriteBool(true)
+			if err != nil {
+				return err
+			}
+			err = encoder.Encode(obj.ThawDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	// Serialize `AllowThaw` param:
+	err = encoder.Encode(obj.AllowThaw)
+	if err != nil {
+		return err
+	}
+	// Serialize `RevealedURI` param (optional):
+	{
+		if obj.RevealedURI == nil {
+			err = encoder.WriteBool(false)
+			if err != nil {
+				return err
+			}
+		} else {
+			err = encoder.WriteBool(true)
+			if err != nil {
+				return err
+			}
+			err = encoder.Encode(obj.RevealedURI)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (obj *CandyMachineV4) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+	// Read and check account discriminator:
+	{
+		discriminator, err := decoder.ReadTypeID()
+		if err != nil {
+			return err
+		}
+		if !discriminator.Equal(CandyMachineV4Discriminator[:]) {
+			return fmt.Errorf(
+				"wrong discriminator: wanted %s, got %s",
+				"[247 230 179 162 114 0 193 179]",
+				fmt.Sprint(discriminator[:]))
+		}
+	}
+	// Deserialize `Seed`:
+	err = decoder.Decode(&obj.Seed)
+	if err != nil {
+		return err
+	}
+	// Deserialize `Bump`:
+	err = decoder.Decode(&obj.Bump)
+	if err != nil {
+		return err
+	}
+	// Deserialize `Authority`:
+	err = decoder.Decode(&obj.Authority)
+	if err != nil {
+		return err
+	}
+	// Deserialize `Wallet`:
+	err = decoder.Decode(&obj.Wallet)
+	if err != nil {
+		return err
+	}
+	// Deserialize `ItemsRedeemed`:
+	err = decoder.Decode(&obj.ItemsRedeemed)
+	if err != nil {
+		return err
+	}
+	// Deserialize `Data`:
+	err = decoder.Decode(&obj.Data)
+	if err != nil {
+		return err
+	}
+	// Deserialize `ThawDate` (optional):
+	{
+		ok, err := decoder.ReadBool()
+		if err != nil {
+			return err
+		}
+		if ok {
+			err = decoder.Decode(&obj.ThawDate)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	// Deserialize `AllowThaw`:
+	err = decoder.Decode(&obj.AllowThaw)
+	if err != nil {
+		return err
+	}
+	// Deserialize `RevealedURI` (optional):
+	{
+		ok, err := decoder.ReadBool()
+		if err != nil {
+			return err
+		}
+		if ok {
+			err = decoder.Decode(&obj.RevealedURI)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 type TotalMints struct {
 	Total uint32
 }
