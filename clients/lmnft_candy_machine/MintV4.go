@@ -341,7 +341,7 @@ func (obj MintV4) MarshalWithEncoder(encoder *ag_binary.Encoder) (err error) {
 	}
 	return nil
 }
-func (obj *MintEmbed) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
+func (obj *MintV4) UnmarshalWithDecoder(decoder *ag_binary.Decoder) (err error) {
   // Deserialize `Proof`:
 	{
 			err = decoder.Decode(&obj.Proof)
