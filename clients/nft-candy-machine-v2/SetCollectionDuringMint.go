@@ -27,7 +27,7 @@ type SetCollectionDuringMint struct {
 	//
 	// [6] = [] collectionMint
 	//
-	// [7] = [] collectionMetadata
+	// [7] = [WRITE] collectionMetadata
 	//
 	// [8] = [] collectionMasterEdition
 	//
@@ -124,7 +124,7 @@ func (inst *SetCollectionDuringMint) GetCollectionMintAccount() *ag_solanago.Acc
 
 // SetCollectionMetadataAccount sets the "collectionMetadata" account.
 func (inst *SetCollectionDuringMint) SetCollectionMetadataAccount(collectionMetadata ag_solanago.PublicKey) *SetCollectionDuringMint {
-	inst.AccountMetaSlice[7] = ag_solanago.Meta(collectionMetadata)
+	inst.AccountMetaSlice[7] = ag_solanago.Meta(collectionMetadata).WRITE()
 	return inst
 }
 
