@@ -51,7 +51,7 @@ type MintNft struct {
 // NewMintNftInstructionBuilder creates a new `MintNft` instruction builder.
 func NewMintNftInstructionBuilder() *MintNft {
 	nd := &MintNft{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 22),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 24),
 	}
 	return nd
 }
