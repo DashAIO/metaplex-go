@@ -57,7 +57,7 @@ type MintIncrementingPriceEdition struct {
 // NewMintIncrementingPriceEditionInstructionBuilder creates a new `MintIncrementingPriceEdition` instruction builder.
 func NewMintIncrementingPriceEditionInstructionBuilder() *MintIncrementingPriceEdition {
 	nd := &MintIncrementingPriceEdition{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 19),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 25),
 	}
 	return nd
 }
@@ -277,6 +277,18 @@ func (inst *MintIncrementingPriceEdition) GetInstructionsAccount() *ag_solanago.
 	return inst.AccountMetaSlice.Get(18)
 }
 
+// SetRemainingAccounts sets the additional accounts required in the instruction.
+func (inst *MintIncrementingPriceEdition) SetRemainingAccounts(pk []ag_solanago.AccountMeta) *MintIncrementingPriceEdition {
+	amount := len(pk)
+	if amount == 0 {
+		return inst
+	}
+	for i := 0; i < amount; i++ {
+		inst.AccountMetaSlice[19+i] = &pk[i]
+	}
+	return inst
+}
+
 func (inst MintIncrementingPriceEdition) Build() *Instruction {
 	return &Instruction{BaseVariant: ag_binary.BaseVariant{
 		Impl:   inst,
@@ -444,7 +456,8 @@ func NewMintIncrementingPriceEditionInstruction(
 	tokenMetadataProgram ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey,
-	instructions ag_solanago.PublicKey) *MintIncrementingPriceEdition {
+	instructions ag_solanago.PublicKey,
+	remainingAccounts []ag_solanago.AccountMeta) *MintIncrementingPriceEdition {
 	return NewMintIncrementingPriceEditionInstructionBuilder().
 		SetData(data).
 		SetBuyerAccount(buyer).
@@ -465,5 +478,6 @@ func NewMintIncrementingPriceEditionInstruction(
 		SetTokenMetadataProgramAccount(tokenMetadataProgram).
 		SetSystemProgramAccount(systemProgram).
 		SetRentAccount(rent).
-		SetInstructionsAccount(instructions)
+		SetInstructionsAccount(instructions).
+		SetRemainingAccounts(remainingAccounts)
 }
