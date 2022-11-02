@@ -67,7 +67,7 @@ type MintFixedPriceEdition struct {
 // NewMintFixedPriceEditionInstructionBuilder creates a new `MintFixedPriceEdition` instruction builder.
 func NewMintFixedPriceEditionInstructionBuilder() *MintFixedPriceEdition {
 	nd := &MintFixedPriceEdition{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 24),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 30),
 	}
 	return nd
 }
@@ -342,6 +342,18 @@ func (inst *MintFixedPriceEdition) GetInstructionsAccount() *ag_solanago.Account
 	return inst.AccountMetaSlice.Get(23)
 }
 
+// SetRemainingAccounts sets the additional accounts required in the instruction.
+func (inst *MintFixedPriceEdition) SetRemainingAccounts(pk []ag_solanago.AccountMeta) *MintFixedPriceEdition {
+	amount := len(pk)
+	if amount == 0 {
+		return inst
+	}
+	for i := 0; i < amount; i++ {
+		inst.AccountMetaSlice[24+i] = &pk[i]
+	}
+	return inst
+}
+
 func (inst MintFixedPriceEdition) Build() *Instruction {
 	return &Instruction{BaseVariant: ag_binary.BaseVariant{
 		Impl:   inst,
@@ -534,7 +546,8 @@ func NewMintFixedPriceEditionInstruction(
 	cardinalTokenManagerProgram ag_solanago.PublicKey,
 	systemProgram ag_solanago.PublicKey,
 	rent ag_solanago.PublicKey,
-	instructions ag_solanago.PublicKey) *MintFixedPriceEdition {
+	instructions ag_solanago.PublicKey,
+	remainingAccounts []ag_solanago.AccountMeta) *MintFixedPriceEdition {
 	return NewMintFixedPriceEditionInstructionBuilder().
 		SetData(data).
 		SetBuyerAccount(buyer).
@@ -560,5 +573,6 @@ func NewMintFixedPriceEditionInstruction(
 		SetCardinalTokenManagerProgramAccount(cardinalTokenManagerProgram).
 		SetSystemProgramAccount(systemProgram).
 		SetRentAccount(rent).
-		SetInstructionsAccount(instructions)
+		SetInstructionsAccount(instructions).
+		SetRemainingAccounts(remainingAccounts)
 }
