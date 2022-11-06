@@ -46,7 +46,7 @@ type MintV6 struct {
 // NewMintV6InstructionBuilder creates a new `MintV6` instruction builder.
 func NewMintV6InstructionBuilder() *MintV6 {
 	nd := &MintV6{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 13),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 20),
 	}
 	return nd
 }
@@ -206,6 +206,18 @@ func (inst *MintV6) GetSystemProgramAccount() *ag_solanago.AccountMeta {
 	return inst.AccountMetaSlice.Get(12)
 }
 
+func (inst *MintV6) SetAdditionalAccounts(pk []ag_solanago.AccountMeta) *MintV6 {
+	amount := len(pk)
+	if amount == 0 {
+		return inst
+	}
+	for i := 0; i < amount; i++ {
+		inst.AccountMetaSlice[13+i] = &pk[i]
+	}
+	return inst
+}
+
+
 func (inst MintV6) Build() *Instruction {
 	return &Instruction{BaseVariant: ag_binary.BaseVariant{
 		Impl:   inst,
@@ -358,7 +370,8 @@ func NewMintV6Instruction(
 	associatedTokenProgram ag_solanago.PublicKey,
 	tokenMetadataProgram ag_solanago.PublicKey,
 	tokenProgram ag_solanago.PublicKey,
-	systemProgram ag_solanago.PublicKey) *MintV6 {
+	systemProgram ag_solanago.PublicKey,
+	additionalAccounts []ag_solanago.AccountMeta) *MintV6 {
 	return NewMintV6InstructionBuilder().
 		SetProof(proof).
 		SetExpect(expect).
@@ -374,5 +387,6 @@ func NewMintV6Instruction(
 		SetAssociatedTokenProgramAccount(associatedTokenProgram).
 		SetTokenMetadataProgramAccount(tokenMetadataProgram).
 		SetTokenProgramAccount(tokenProgram).
-		SetSystemProgramAccount(systemProgram)
+		SetSystemProgramAccount(systemProgram).
+		SetAdditionalAccounts(additionalAccounts)
 }
