@@ -46,7 +46,7 @@ type MintV6 struct {
 // NewMintV6InstructionBuilder creates a new `MintV6` instruction builder.
 func NewMintV6InstructionBuilder() *MintV6 {
 	nd := &MintV6{
-		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 20),
+		AccountMetaSlice: make(ag_solanago.AccountMetaSlice, 30),
 	}
 	return nd
 }
