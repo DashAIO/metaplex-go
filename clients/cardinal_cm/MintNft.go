@@ -24,7 +24,7 @@ type MintNft struct {
 	//
 	// [4] = [WRITE] metadata
 	//
-	// [5] = [WRITE] mint
+	// [5] = [WRITE,SIGNER] mint
 	//
 	// [6] = [SIGNER] mintAuthority
 	//
@@ -119,7 +119,7 @@ func (inst *MintNft) GetMetadataAccount() *ag_solanago.AccountMeta {
 
 // SetMintAccount sets the "mint" account.
 func (inst *MintNft) SetMintAccount(mint ag_solanago.PublicKey) *MintNft {
-	inst.AccountMetaSlice[5] = ag_solanago.Meta(mint).WRITE()
+	inst.AccountMetaSlice[5] = ag_solanago.Meta(mint).WRITE().SIGNER()
 	return inst
 }
 
